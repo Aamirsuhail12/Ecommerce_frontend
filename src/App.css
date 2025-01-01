@@ -1,0 +1,47 @@
+
+body{
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  width: 100%;
+}
+
+.header{
+  width: 100%;
+  background-color: #007BFF;
+}
+
+.search Button svg{
+  font-size: 30px;
+  color: black !important;
+}
+
+.user Button svg{
+  font-size : 30px;
+  color: black;
+}
+
+.cart svg{
+  color: red !important;
+}
+
+.body_{
+  max-width: 1200px;
+  width: 90%;
+  margin: auto;
+}
+
+.nav_bar Button{
+  color: black !important;
+  font-weight: 700;
+}
+
+.nav_bar Button:hover{
+  background-color: #ceecf5;
+}
+
+.nav_bar a Button:hover{
+  color: #00BFFF !important;
+}
