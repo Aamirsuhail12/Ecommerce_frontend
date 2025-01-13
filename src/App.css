@@ -1,4 +1,7 @@
 
+@import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css');
+
 body{
   margin: 0;
   padding: 0;
@@ -23,6 +26,9 @@ body{
   color: black;
 }
 
+.cart {
+  position: relative;
+}
 .cart svg{
   color: red !important;
 }
@@ -44,4 +50,229 @@ body{
 
 .nav_bar a Button:hover{
   color: #00BFFF !important;
+}
+.locationModel{
+  position: relative;
+}
+.locationModel .MuiPaper-root{
+  padding: 25px;
+}
+.locationModel .MuiPaper-root h1{
+  font-size: large;
+  font-weight: bold;
+}
+
+.countrylist{
+  margin-top: 15px;
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.countrylist Button{
+  color: black;
+  width: 100%;
+  justify-content: start;
+  padding: 10px;
+}
+
+.countrylist Button:hover{
+  background-color: rgb(209, 208, 208);
+}
+
+::-webkit-scrollbar{
+  width: 8px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: rgb(198, 196, 196);
+  height: 150px;
+}
+::-webkit-scrollbar-track{
+  background-color: transparent;
+}
+
+.countrylist li Button .active{
+  background-color: #252323 !important;
+}
+
+.food .nav_bar .dropdown {
+    display: flex;
+    justify-content: start;
+    opacity: 0;
+    display: none;
+}
+
+.food .nav_bar li:hover .dropdown{
+  opacity: 1;
+  display: inherit;
+  z-index: 100;
+  background-color: white;
+  color: black;
+}
+.food .nav_bar .dropdown a{
+  color: black;
+  text-decoration: none;
+}
+
+.food .nav_bar .dropdown a Button{
+  width: 100%;
+  justify-content: start;
+  
+}
+
+.food .nav_bar .dropdown a Button:hover{
+  background-color: rgb(226, 223, 223);
+  color: black !important;
+}
+.food .nav_bar .dropdown a .custom-button{
+  font-weight: 300;
+  font-size: small;
+}
+
+.food .ct_list{
+  display: none;
+  position: relative;
+  width : 250px;
+  background-color: white;
+  color: black;
+}
+.food .open{
+  display: inherit;
+  z-index: 200;
+  position: absolute;
+}
+.food .ct_list li a .btn{
+  font-weight: bold;
+  color: black;
+  width: 100%;
+  justify-content: start;
+}
+
+.food .ct_list li a .btn:hover{
+  background-color: rgb(209, 209, 209);
+
+}
+
+.home_{
+  margin: auto;
+  overflow: hidden;
+}
+
+.food{
+  margin-bottom: 10px;
+}
+.home_banner {
+  position: relative;
+}
+.home_banner .slick-arrow{
+    position: absolute;
+    top : 45%;
+    background-color: black;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 100;
+}
+.home_banner .slick-arrow.slick-prev{
+  left : 25px !important;
+}
+
+.home_banner .slick-arrow.slick-next{
+  right : 25px !important;
+}
+
+.food .ct_list .submenu{
+  text-decoration: none;
+}
+.food .ct_list .submenu svg{
+  color: black;
+}
+
+.food .ct_list .sub{
+  position: absolute;
+  left: 100%;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  width: 200px;
+  height: 100%;
+  border-left: 1px solid black;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 600ms ease-in-out;
+}
+
+.food .ct_list li:hover .sub{
+  opacity: 1;
+  visibility: visible;
+}
+
+.banner{
+  height: 100%;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.cart .star-icon{
+  color: rgb(246, 246, 65) !important;
+}
+
+.cart{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+}
+
+.cart .fullscr-icon{
+  color: black !important;
+}
+
+.cart .heart-icon{
+  font-size: x-large ;
+  color: black !important;
+}
+.cart .btn{
+  width: 30px;
+  height: 40px;
+}
+.cart .btn:hover{
+  background-color: rgb(85, 85, 246);
+}
+.cart .btn:hover svg{
+  color: white !important;
+}
+
+.products .last-card{
+  border-right: 1px solid black;
+}
+
+.cart .product_img{
+  z-index: 100;
+}
+
+.cart .product_img:hover{
+  z-index: 100;
+  transform: scale(1.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.product_dialog{
+  position: relative;
+  padding: 50px;
+}
+.product_model .MuiPaper-elevation{
+  width: 1000px;
+  max-width: 1000px;
+}
+
+.slider_item{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dot_container{
+  position: absolute;
+  top: 10px;
 }

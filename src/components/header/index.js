@@ -3,7 +3,6 @@ import eCommerceImage from '../../assets/e-commerce.png';
 import CountryDropDown from '../CountryDropDown';
 import User from '../User'
 import Search from '../Search';
-import Button from '@mui/material/Button';
 import NavBar from '../NavBar';
 
 
