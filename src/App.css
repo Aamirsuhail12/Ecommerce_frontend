@@ -29,9 +29,6 @@ body{
 .cart {
   position: relative;
 }
-.cart svg{
-  color: red !important;
-}
 
 .body_{
   max-width: 1200px;
@@ -214,32 +211,48 @@ body{
   width: 300px;
 }
 
+
 .cart .star-icon{
   color: rgb(246, 246, 65) !important;
 }
 
-.cart{
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
+.cart_ svg{
+  padding: 5px !important;
+  background-color:#fecaca ;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.cart .fullscr-icon{
+.cart1_ svg{
+  padding: 5px !important;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cart1_ .fullscr-icon{
   color: black !important;
+  font-size: 40px;
+  font-weight: bold;
 }
 
-.cart .heart-icon{
+.cart1_ .heart-icon{
   font-size: x-large ;
   color: black !important;
+  font-weight: bold;
 }
-.cart .btn{
-  width: 30px;
-  height: 40px;
-}
-.cart .btn:hover{
+
+.cart1_:hover{
   background-color: rgb(85, 85, 246);
 }
-.cart .btn:hover svg{
+.cart1_:hover svg{
   color: white !important;
 }
 
@@ -248,11 +261,11 @@ body{
 }
 
 .cart .product_img{
-  z-index: 100;
+  z-index: 10;
 }
 
 .cart .product_img:hover{
-  z-index: 100;
+  z-index: 10;
   transform: scale(1.1);
   transition: all 0.3s ease-in-out;
 }
@@ -275,4 +288,72 @@ body{
 .dot_container{
   position: absolute;
   top: 10px;
+}
+
+.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root{
+  padding: 2px 10px !important;
+}
+.btn_ svg{
+color: black;
+font-size: 25px;
+opacity: 0.5;
+}
+.btn{
+  color: black;
+}
+
+.one{
+  width: 100%;
+  border : 1px solid black;
+  display: flex;
+  flex-direction: row;
+  gap: 100px;
+  opacity: 1;
+}
+
+.two{
+  width: 50%;
+  border : 1px solid black;
+}
+
+.two .product_img{
+  width: 200px;
+  height: 200px;
+}
+.three{
+  border: 1px solid black;
+}
+.four{
+  border: 1px solid black;
+  width: 25%;
+}
+
+.four .product_img{
+  width: 70px;
+  height: 70px;
+}
+
+.sticky{
+  position: sticky;
+  top: 10px;
+}
+
+.act svg{
+  color: black;
+  font-size: 25px;
+  opacity: 1;
+  }
+
+.active{
+  background-color: blue;
+  color: white;
+}
+
+.info .active{
+  background-color: blue;
+  color: white !important;
+}
+
+button {
+  text-transform: none !important;
 }

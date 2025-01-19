@@ -3,17 +3,17 @@ import { Dialog, Rating } from '@mui/material';
 import React, { useState } from "react";
 import Slider from "react-slick";
 import apple_img from '../../assets/apple.jpg';
-import { FaPlus } from "react-icons/fa6";
-import { FaMinus } from "react-icons/fa6";
+
 import { Button } from '@mui/material';
 import { IoIosHeart } from "react-icons/io";
 import { MdCompareArrows } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
+import CountHandle from '../CountHandle';
 
 
 const Product = ({ isopen, handleOpen }) => {
 
-    const [count, setCount] = useState(1);
+   
     var settings = {
         dots: true,
         infinite: false,
@@ -122,20 +122,7 @@ const Product = ({ isopen, handleOpen }) => {
                             Vivamus adipiscing nist ut dolor dignissim semper.Nulia luctus malesauda tincidunt.Class aptent taciti.
                         </p>
                         <div className='flex gap-10'>
-                            <div className='flex justify-center items-center gap-5'>
-                                <button className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'
-                                    onClick={() => {
-                                        if (count > 1)
-                                            setCount(count - 1);
-                                    }}
-                                ><FaMinus /></button>
-                                <span>{count}</span>
-                                <button
-                                    onClick={() => {
-                                        setCount(count + 1);
-                                    }}
-                                    className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'><FaPlus /></button>
-                            </div>
+                            <CountHandle/>
                             <Button style={{
                                 backgroundColor: 'blue',
                                 color: 'white',

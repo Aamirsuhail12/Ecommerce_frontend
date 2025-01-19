@@ -1,0 +1,8 @@
+
+
+.sign{
+    clip-path: circle(65% at 50% 3%);
+    background: linear-gradient(to top, #007bff, #87ceeb);
+    height: 100vh;
+    width: 100%;
+}
