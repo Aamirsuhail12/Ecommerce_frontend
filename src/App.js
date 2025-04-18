@@ -28,7 +28,6 @@ function App() {
     try {
       const response = await axios.get('http://localhost:5000/coutrylist');
       setcountryList(Object.values(response.data.data));
-      // console.log(Object.values(response.data.data))
     } catch (error) {
       console.log(error);
     }
