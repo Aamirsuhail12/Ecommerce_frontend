@@ -1,28 +1,27 @@
-
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css');
 
-body{
+body {
   margin: 0;
   padding: 0;
 }
 
-.container{
+.container {
   width: 100%;
 }
 
-.header{
+.header {
   width: 100%;
   background-color: #007BFF;
 }
 
-.search Button svg{
+.search Button svg {
   font-size: 30px;
   color: black !important;
 }
 
-.user Button svg{
-  font-size : 30px;
+.user Button svg {
+  font-size: 30px;
   color: black;
 }
 
@@ -30,161 +29,186 @@ body{
   position: relative;
 }
 
-.body_{
+.body_ {
   max-width: 1200px;
   width: 90%;
   margin: auto;
 }
 
-.nav_bar Button{
+.nav_bar Button {
   color: black !important;
   font-weight: 700;
 }
 
-.nav_bar Button:hover{
+.nav_bar Button:hover {
   background-color: #ceecf5;
 }
 
-.nav_bar a Button:hover{
+.nav_bar a Button:hover {
   color: #00BFFF !important;
 }
-.locationModel{
+
+.locationModel {
   position: relative;
 }
-.locationModel .MuiPaper-root{
+
+.locationModel .MuiPaper-root {
   padding: 25px;
 }
-.locationModel .MuiPaper-root h1{
+
+.locationModel .MuiPaper-root h1 {
   font-size: large;
   font-weight: bold;
 }
 
-.countrylist{
+.countrylist {
   margin-top: 15px;
   max-height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
-.countrylist Button{
+
+.countrylist Button {
   color: black;
   width: 100%;
   justify-content: start;
   padding: 10px;
 }
 
-.countrylist Button:hover{
+.countrylist Button:hover {
   background-color: rgb(209, 208, 208);
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 8px;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   background-color: rgb(198, 196, 196);
   height: 150px;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-.countrylist li Button .active{
+.countrylist li Button .active {
   background-color: #252323 !important;
 }
 
 .food .nav_bar .dropdown {
-    display: flex;
-    justify-content: start;
-    opacity: 0;
-    display: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  opacity: 0;
 }
 
-.food .nav_bar li:hover .dropdown{
+.food .nav_bar li:hover .dropdown {
   opacity: 1;
-  display: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   z-index: 100;
   background-color: white;
   color: black;
 }
-.food .nav_bar .dropdown a{
+
+.food .nav_bar li Button:hover {
+  justify-content: flex-start;
+  color: black;
+
+}
+.food .nav_bar .dropdown Button a {
   color: black;
   text-decoration: none;
+
 }
 
-.food .nav_bar .dropdown a Button{
+.food .nav_bar .dropdown  Button {
   width: 100%;
-  justify-content: start;
-  
+  justify-content: flex-start !important;
+
 }
 
-.food .nav_bar .dropdown a Button:hover{
+.food .nav_bar .dropdown  Button:hover {
   background-color: rgb(226, 223, 223);
   color: black !important;
-}
-.food .nav_bar .dropdown a .custom-button{
-  font-weight: 300;
-  font-size: small;
+
 }
 
-.food .ct_list{
+.food .nav_bar .dropdown  .custom-button {
+  font-weight: 300;
+  font-size: small;
+  justify-content: start !important;
+}
+
+.food .ct_list {
   display: none;
   position: relative;
-  width : 250px;
+  width: 250px;
   background-color: white;
   color: black;
 }
-.food .open{
+
+.food .open {
   display: inherit;
   z-index: 200;
   position: absolute;
 }
-.food .ct_list li a .btn{
+
+.food .ct_list li a .btn {
   font-weight: bold;
   color: black;
   width: 100%;
-  justify-content: start;
+  justify-content: flex-start !important;
 }
 
-.food .ct_list li a .btn:hover{
+.food .ct_list li a .btn:hover {
   background-color: rgb(209, 209, 209);
 
 }
 
-.home_{
+.home_ {
   margin: auto;
   overflow: hidden;
 }
 
-.food{
+.food {
   margin-bottom: 10px;
 }
+
 .home_banner {
   position: relative;
 }
-.home_banner .slick-arrow{
-    position: absolute;
-    top : 45%;
-    background-color: black;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    z-index: 100;
-}
-.home_banner .slick-arrow.slick-prev{
-  left : 25px !important;
+
+.home_banner .slick-arrow {
+  position: absolute;
+  top: 45%;
+  background-color: black;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 100;
 }
 
-.home_banner .slick-arrow.slick-next{
-  right : 25px !important;
+.home_banner .slick-arrow.slick-prev {
+  left: 25px !important;
 }
 
-.food .ct_list .submenu{
+.home_banner .slick-arrow.slick-next {
+  right: 25px !important;
+}
+
+.food .ct_list .submenu {
   text-decoration: none;
 }
-.food .ct_list .submenu svg{
+
+.food .ct_list .submenu svg {
   color: black;
 }
 
-.food .ct_list .sub{
+.food .ct_list .sub {
   position: absolute;
   left: 100%;
   top: 0;
@@ -193,32 +217,32 @@ body{
   background-color: white;
   color: black;
   width: 200px;
-  height: 100%;
+  height: 100% !important;
   border-left: 1px solid black;
   opacity: 0;
   visibility: hidden;
-  transition: all 600ms ease-in-out;
+  /* transition: all 600ms step-end; */
 }
 
-.food .ct_list li:hover .sub{
-  opacity: 1;
-  visibility: visible;
+.food .ct_list li:hover .sub {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-.banner{
+.banner {
   height: 100%;
   border-radius: 10px;
   width: 300px;
 }
 
 
-.cart .star-icon{
+.cart .star-icon {
   color: rgb(246, 246, 65) !important;
 }
 
-.cart_ svg{
+.cart_ svg {
   padding: 5px !important;
-  background-color:#fecaca ;
+  background-color: #fecaca;
   border-radius: 50%;
   height: 40px;
   width: 40px;
@@ -227,7 +251,7 @@ body{
   align-items: center;
 }
 
-.cart1_ svg{
+.cart1_ svg {
   padding: 5px !important;
   border-radius: 50%;
   height: 40px;
@@ -237,123 +261,210 @@ body{
   align-items: center;
 }
 
-.cart1_ .fullscr-icon{
+.cart1_ .fullscr-icon {
   color: black !important;
   font-size: 40px;
   font-weight: bold;
 }
 
-.cart1_ .heart-icon{
-  font-size: x-large ;
+.cart1_ .heart-icon {
+  font-size: x-large;
   color: black !important;
   font-weight: bold;
 }
 
-.cart1_:hover{
+.cart1_:hover {
   background-color: rgb(85, 85, 246);
 }
-.cart1_:hover svg{
+
+.cart1_:hover svg {
   color: white !important;
 }
 
-.products .last-card{
+.products .last-card {
   border-right: 1px solid black;
 }
 
-.cart .product_img{
+.cart .product_img {
   z-index: 10;
 }
 
-.cart .product_img:hover{
+.cart .product_img:hover {
   z-index: 10;
   transform: scale(1.1);
   transition: all 0.3s ease-in-out;
 }
 
-.product_dialog{
+.product_dialog {
   position: relative;
   padding: 50px;
 }
-.product_model .MuiPaper-elevation{
+
+.product_model .MuiPaper-elevation {
   width: 1000px;
   max-width: 1000px;
 }
 
-.slider_item{
+.slider_item {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.dot_container{
+.dot_container {
   position: absolute;
   top: 10px;
 }
 
-.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root{
+.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root {
   padding: 2px 10px !important;
 }
-.btn_ svg{
-color: black;
-font-size: 25px;
-opacity: 0.5;
-}
-.btn{
+
+.btn_ svg {
   color: black;
+  font-size: 25px;
+  opacity: 0.5;
 }
 
-.one{
+.btn {
+  color: black;
+  background-color: white !important;
+}
+
+.btn:hover{
+  background-color: rgb(234, 234, 234) !important;
+}
+
+.one {
   width: 100%;
-  border : 1px solid black;
+  border: 1px solid black;
   display: flex;
   flex-direction: row;
   gap: 100px;
   opacity: 1;
 }
 
-.two{
+.two {
   width: 50%;
-  border : 1px solid black;
+  border: 1px solid black;
 }
 
-.two .product_img{
+.two .product_img {
   width: 200px;
   height: 200px;
 }
-.three{
+
+.three {
   border: 1px solid black;
 }
-.four{
+
+.four {
   border: 1px solid black;
-  width: 25%;
+  width: 24%;
 }
 
-.four .product_img{
-  width: 70px;
-  height: 70px;
+.four .product_img {
+  width: 90px;
+  height: 90px;
 }
 
-.sticky{
+.sticky {
   position: sticky;
   top: 10px;
 }
 
-.act svg{
+.act svg {
   color: black;
   font-size: 25px;
   opacity: 1;
-  }
+}
 
-.active{
+.active {
   background-color: blue;
   color: white;
 }
 
-.info .active{
+.info .active {
   background-color: blue;
   color: white !important;
 }
 
 button {
   text-transform: none !important;
+}
+
+.category_slider .slick-track {
+  display: flex !important;
+  gap: 20px;
+  /* works only if slick-slide has no margin/padding */
+}
+
+.category_slider .slick-slide {
+  padding-top: 15px;
+  height: 150px !important;
+  width: 100% !important;
+  float: none !important;
+  /* required to make flexbox work */
+}
+
+.slick-dots li {
+  width: 60px !important;
+  height: 60px !important;
+
+}
+
+.slick-dots li img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-width: 2px;
+  border-color: rgb(208, 205, 205);
+  border-style: dotted;
+}
+
+
+.category_slider .slick-arrow {
+  position: absolute;
+  top: 40%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.category_slider .slick-prev {
+  left: -40px; /* Adjust based on your layout */
+}
+
+.category_slider .slick-next {
+  right: -40px; /* Adjust based on your layout */
+}
+
+.products .slick-arrow {
+  position: absolute;
+  top: 40%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.products .slick-prev {
+  left: -40px; /* Adjust based on your layout */
+}
+
+.products .slick-next {
+  right: -40px; /* Adjust based on your layout */
 }

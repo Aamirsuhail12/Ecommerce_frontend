@@ -11,9 +11,9 @@ import { IoClose } from "react-icons/io5";
 import CountHandle from '../CountHandle';
 
 
-const Product = ({ isopen, handleOpen }) => {
+const Product = ({ isopen, handleOpen, product }) => {
 
-   
+
     var settings = {
         dots: true,
         infinite: false,
@@ -22,12 +22,16 @@ const Product = ({ isopen, handleOpen }) => {
         slidesToScroll: 1,
         arrows: false,
         customPaging: i => (
+
             <img
-                className='border-2'
-                src={apple_img}
-                alt="apple"
+                src={product.images[i]}
+                alt="Image not found"
+                className="w-full h-full object-cover"
             />
+
         ),
+
+
     };
     return (
         <Dialog className='relative product_model' open={isopen} style={{ backgroundColor: 'transparent' }} onClose={handleOpen}>
@@ -49,15 +53,14 @@ const Product = ({ isopen, handleOpen }) => {
 
             <div className='product_dialog'>
                 <div>
-                    <h1 className='font-bold text-[25px]'>All Natural Italian-Style Chicken Meatballs</h1>
+                    <h1 className='font-bold text-[25px]'>{product.name}</h1>
                     <div className='flex gap-5'>
-                        <span>Brands: Welch's</span>
+                        <span>Brands: {product.brand}</span>
                         <Rating
-                            value={5}
+                            value={product.rating}
                             precision={0.5}
                         />
-                        <span>REVIEW</span>
-                        <span>SKU:ZU49VOR</span>
+
                     </div>
                 </div>
                 <hr className='mt-5 mb-5' />
@@ -71,58 +74,68 @@ const Product = ({ isopen, handleOpen }) => {
                                 top: '0px',
                                 left: '10px'
                             }}
-                        >28%</Button>
+                        >{product.discount}%</Button>
                         <Slider {...settings} >
-                            <div>
-                                <img
-                                    className='mx-auto'
-                                    height="200px"
-                                    width="200px"
-                                    src={apple_img}
-                                    alt="apple"
-                                />
-                            </div>
-                            <div className='slider_item'>
-                                <img
-                                    className='mx-auto'
-                                    height="200px"
-                                    width="200px"
-                                    src={apple_img}
-                                    alt="apple"
-                                />
-                            </div>
-                            <div className='slider_item'>
-                                <img
-                                    className='mx-auto'
-                                    height="200px"
-                                    width="200px"
-                                    src={apple_img}
-                                    alt="apple"
-                                />
-                            </div>
-                            <div className='slider_item'>
-                                <img
-                                    className='mx-auto'
-                                    height="200px"
-                                    width="200px"
-                                    src={apple_img}
-                                    alt="apple"
-                                />
-                            </div>
+                            {
+                                product.images && product.images.map((url) => {
+
+                                    return (
+                                        <div>
+                                            <img
+                                                className='mx-auto'
+                                                height="200px"
+                                                width="200px"
+                                                src={url}
+                                                alt="Image not found"
+                                            />
+                                        </div>
+                                    )
+                                })
+                            }
                         </Slider>
                     </div>
                     <div className='md:w-7/12 flex flex-col gap-5'>
 
                         <div>
-                            <span><del>$9.35</del></span>
-                            <span className='ml-4 text-red-800 font-bold'>$7.25</span>
+                            <span><del>${product.oldPrice}</del></span>
+                            <span className='ml-4 text-red-800 font-bold'>${product.price}</span>
                         </div>
-                        <span style={{ backgroundColor: '#90EE90', color: 'green', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '90px', borderRadius: '20px', padding: '5px' }}>IN STOCK</span>
+                        <span style={{ backgroundColor: '#90EE90', color: 'green', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '200px', borderRadius: '20px', padding: '5px' }}>IN STOCK</span>
                         <p>
-                            Vivamus adipiscing nist ut dolor dignissim semper.Nulia luctus malesauda tincidunt.Class aptent taciti.
+                            {product.description}
                         </p>
+
+
+                        <div className='flex gap-3'>{
+                            product.RAM && product.RAM.map((ram) => {
+
+                                return (
+                                    <div className='bg-blue-600 text-white px-2 py-[2px] font-semibold rounded-full'>{ram}</div>
+                                )
+                            })}
+                        </div>
+
+                        <div className='flex gap-3'>{
+                            product.weight && product.weight.map((w) => {
+
+                                return (
+                                    <div className='bg-blue-600 text-white px-2 py-[2px] font-semibold rounded-full'>{w}</div>
+                                )
+                            })}
+                        </div>
+
+                        <div className='flex gap-3'>{
+                            product.size && product.size.map((s) => {
+
+                                return (
+                                    <div className='bg-blue-600 text-white px-2 py-[2px] font-semibold rounded-full'>{s}</div>
+                                )
+                            })}
+                        </div>
+
+
                         <div className='flex gap-10'>
-                            <CountHandle/>
+                            <CountHandle />
                             <Button style={{
                                 backgroundColor: 'blue',
                                 color: 'white',

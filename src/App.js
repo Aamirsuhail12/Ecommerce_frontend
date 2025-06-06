@@ -13,12 +13,16 @@ import YourCarts from './components/YourCarts';
 import SignIn from './pages/SignIn';
 import { Route, Routes } from 'react-router';
 import SignUp from './pages/SignUp';
+import Cart from './components/Cart';
+import ViewAllProducts from './components/ViewAllProducts';
 
 const Mycontext = createContext();
 function App() {
 
   const [countryList, setcountryList] = useState();
   const [isheaderfooterShow, setisheaderfooterShow] = useState(true);
+  const [filter, setfilter] = useState('Electronics');
+  const [listingfilter, setlistingfilter] = useState();
 
   useEffect(() => {
     fetchCountryList();
@@ -32,10 +36,15 @@ function App() {
       console.log(error);
     }
   }
+
   const values = {
     countryList,
     isheaderfooterShow,
-    setisheaderfooterShow
+    setisheaderfooterShow,
+    filter,
+    setfilter,
+    listingfilter,
+    setlistingfilter
   }
   return (
     <Mycontext.Provider value={values}>
@@ -44,11 +53,12 @@ function App() {
       }
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/cat' element={<Listing/>}/>
-        <Route path='/product' element={<ProductDetails/>}/>
-        <Route path='/cart' element={<YourCarts/>} />
+        <Route path='/productListing' element={<Listing />} />
+        <Route path='/product' element={<ProductDetails />} />
+        <Route path='/cart' element={<YourCarts />} />
+        <Route path='/viewall' element={<ViewAllProducts />} />
         <Route path='/signin' element={<SignIn />} />
-        <Route path='/signup' element={<SignUp/>}/>
+        <Route path='/signup' element={<SignUp />} />
       </Routes>
       {
         isheaderfooterShow === true && <Footerlist />

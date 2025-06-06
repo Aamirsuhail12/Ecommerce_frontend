@@ -21,32 +21,18 @@ const RelativeProducts = ({title})=>{
         <h1 className="font-semibold text-[30px]">{title}</h1>
         <Slider {...settings}>
           <div>
-              <Cart/>
+              {/* <Cart/> */}
          </div>
          <div>
-              <Cart/>
+              {/* <Cart/> */}
          </div>
          <div>
-              <Cart/>
+              {/* <Cart/> */}
          </div>
          <div>
-              <Cart/>
+              {/* <Cart/> */}
          </div>
-         <div>
-              <Cart/>
-         </div>
-         <div>
-              <Cart/>
-         </div>
-         <div>
-              <Cart/>
-         </div>
-         <div>
-              <Cart/>
-         </div>
-         <div>
-              <Cart/>
-         </div>
+        
         </Slider>
         </div>
     )
