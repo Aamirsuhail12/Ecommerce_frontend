@@ -1,20 +1,12 @@
-
+import { useEffect, useState, useRef } from "react";
+import { getAll, update } from "../../RestApi";
 import Card from "../Card";
-import { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
-import { getAll } from "../../RestApi";
-const RelatedProducts = ({ product }) => {
 
-     const sliderRef = useRef(null);
-     const [filter, setFilter] = useState({
-          'name': '',
-          'category': '',
-          'subcategory': '',
-          '_id': ''
-     });
-
+const RecentlyViewed = ({ productId }) => {
 
      const [products, setProducts] = useState([]);
+     const sliderRef = useRef(null);
 
      var settings = {
           centerMode: false,
@@ -58,46 +50,38 @@ const RelatedProducts = ({ product }) => {
 
      };
 
-     const GetRelatedProducts = async () => {
 
+     const PatchedUser = async () => {
           try {
+               const response = await update('http://localhost:5000/users/create/recently-viewed', { id: productId })
+               // console.log('rec', response.data);
 
-               const response = await getAll(`http://localhost:5000/products?page=-1&filter=${encodeURIComponent(JSON.stringify(filter))}`);
+          } catch (error) {
+               console.log('Error in patching user', error.response.data.msg);
+          }
+     }
 
-               setProducts(response?.data?.products)
+     const getRecentlyViewedProducts = async () => {
+          try {
+               const response = await getAll('http://localhost:5000/users/recently-viewed');
+               setProducts(response?.data?.recentlyviewedProducts?.filter(p => p._id !== productId))
                setTimeout(() => {
                     sliderRef?.current?.slickGoTo(0);
                }, 1000)
 
           } catch (error) {
-               console.log('Error in getting products', error);
+               console.log('Error in getting recently-viewed products', error.response.data.msg);
           }
      }
-
      useEffect(() => {
-
-          if (product && product?.name && product?.category && product?.category?.name && product?.subcategory &&
-               product?.subcategory?.subcategory && product?.brand
-          ) {
-               setFilter({
-                    '_id': product?._id,
-                    'category': product?.category?.name,
-                    'subcategory': product?.subcategory?.subcategory,
-                    'brand': product?.brand
-               })
-          }
-     }, [product])
-
-
-     useEffect(() => {
-          GetRelatedProducts();
-
-     }, [filter])
+          PatchedUser();
+          getRecentlyViewedProducts();
+     }, [productId])
      return (
           <div className="mt-5 mb-5">
                {
                     products.length !== 0 ?
-                         <h1 className="font-semibold text-[30px]">Related Products</h1> : ''
+                         <h1 className="font-semibold text-[30px]">RecentlyViewed Products</h1> : ''
                }
 
                <Slider ref={sliderRef} {...settings} className='selectedproducts'>
@@ -111,10 +95,9 @@ const RelatedProducts = ({ product }) => {
                     }
                </Slider>
 
+
           </div>
      )
 }
 
-export default RelatedProducts;
-
-
+export default RecentlyViewed;

@@ -1,6 +1,308 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css');
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Refactor CSS */
+
+.space {
+  @apply mx-4 mb-4 sm:mx-8 md:mb-4 md:mx-12;
+}
+
+/* Header Style */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 8px;
+  background-color: gray;
+  border-radius: 10px;
+}
+
+
+/* Home Slider style */
+
+.slick-arrow {
+
+  position: absolute;
+  top: 50%;
+  min-width: 30px;
+  min-height: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: black;
+  color: white;
+  z-index: 100;
+}
+
+.slick-arrow:focus {
+  background-color: black;
+  color: white;
+}
+
+.slick-arrow:hover {
+  background-color: black;
+  color: white;
+}
+
+.slick-arrow.slick-prev {
+  left: 10px !important;
+}
+
+.slick-arrow.slick-next {
+  right: 10px !important;
+}
+
+@media (min-width : 768px) {
+
+  .slick-arrow.slick-prev {
+    left: 25px !important;
+  }
+
+  .slick-arrow.slick-next {
+    right: 25px !important;
+  }
+
+  .slick-arrow {
+    min-width: 45px;
+    min-height: 45px;
+    width: 45px;
+    height: 45px;
+  }
+}
+
+
+/* Navbar style */
+
+
+.navbar .slick-slide {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.navbar .slick-arrow {
+
+  position: absolute;
+  top: 50%;
+  min-width: 30px;
+  min-height: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: skyblue;
+  color: white;
+  z-index: 100;
+}
+
+.navbar .slick-arrow.slick-prev {
+  left: -15px !important;
+}
+
+.navbar .slick-arrow.slick-next {
+  right: -15px !important;
+}
+
+@media (min-width : 768px) {
+
+  .navbar .slick-arrow.slick-prev {
+    left: -25px !important;
+  }
+
+  .navbar .slick-arrow.slick-next {
+    right: -25px !important;
+  }
+}
+
+/* Featured Category style */
+.featuredcat .slick-slide {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+}
+
+.featuredcat .slick-arrow {
+  background-color: skyblue;
+}
+
+
+.featuredcat .slick-arrow.slick-prev {
+  left: -15px !important;
+}
+
+.featuredcat .slick-arrow.slick-next {
+  right: -15px !important;
+}
+
+@media (min-width : 768px) {
+  .featuredcat .slick-arrow.slick-prev {
+    left: -25px !important;
+  }
+
+  .featuredcat .slick-arrow.slick-next {
+    right: -25px !important;
+  }
+}
+
+
+/* SelectedProducts  Style*/
+
+.selectedproducts .slick-slide {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.selectedproducts .slick-arrow {
+  background-color: skyblue;
+}
+
+.selectedproducts .slick-arrow.slick-prev {
+  left: -25px !important;
+}
+
+.selectedproducts .slick-arrow.slick-next {
+  right: -25px !important;
+}
+
+/* Product Listing Sytle */
+.btn_ svg {
+  color: black;
+  font-size: 25px;
+  opacity: 0.5;
+}
+
+.act svg {
+  color: black;
+  font-size: 25px;
+  opacity: 1;
+}
+
+.one {
+  width: 100%;
+  height: auto;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.one .img-container {
+  border: 1px solid black;
+  margin: auto;
+  width: 50%;
+  height: 100px;
+}
+
+.two {
+  width: 48%;
+  height: auto;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.two .img-container {
+  border: 1px solid black;
+  margin: auto;
+  width: 50%;
+  height: 100px;
+}
+
+@media (min-width : 768px) {
+  .two .img-container {
+    height: 180px;
+  }
+}
+
+.three {
+  width: 30%;
+  height: auto;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.three .img-container {
+  border: 1px solid black;
+  margin: auto;
+  width: 50%;
+  height: 120px;
+}
+
+.three .discount {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.four {
+  width: 23%;
+  height: auto;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.four .img-container {
+  border: 1px solid black;
+  margin: auto;
+  width: 50%;
+  height: 100px;
+}
+
+.four .discount {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/*
+.two {
+  width: 50%;
+  border: 1px solid black;
+}
+
+.three {
+  border: 1px solid black;
+}
+
+.four {
+  border: 1px solid black;
+  width: 24%;
+}
+
+.four .product_img {
+  width: 90px;
+  height: 90px;
+}
+
+.sticky {
+  position: sticky;
+  top: 10px;
+}
+ */
+
+
+/*
 body {
   margin: 0;
   padding: 0;
@@ -221,7 +523,7 @@ body {
   border-left: 1px solid black;
   opacity: 0;
   visibility: hidden;
-  /* transition: all 600ms step-end; */
+  transition: all 600ms step-end; 
 }
 
 .food .ct_list li:hover .sub {
@@ -396,7 +698,7 @@ button {
 .category_slider .slick-track {
   display: flex !important;
   gap: 20px;
-  /* works only if slick-slide has no margin/padding */
+   works only if slick-slide has no margin/padding 
 }
 
 .category_slider .slick-slide {
@@ -404,7 +706,7 @@ button {
   height: 150px !important;
   width: 100% !important;
   float: none !important;
-  /* required to make flexbox work */
+   required to make flexbox work 
 }
 
 .slick-dots li {
@@ -439,11 +741,11 @@ button {
 }
 
 .category_slider .slick-prev {
-  left: -40px; /* Adjust based on your layout */
+  left: -40px; Adjust based on your layout 
 }
 
 .category_slider .slick-next {
-  right: -40px; /* Adjust based on your layout */
+  right: -40px;  Adjust based on your layout 
 }
 
 .products .slick-arrow {
@@ -462,9 +764,26 @@ button {
 }
 
 .products .slick-prev {
-  left: -40px; /* Adjust based on your layout */
+  left: -40px; Adjust based on your layout 
 }
 
 .products .slick-next {
-  right: -40px; /* Adjust based on your layout */
+  right: -40px;  Adjust based on your layout 
 }
+
+.Related_Products .slick-arrow {
+  position: absolute;
+  top: 40%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+*/

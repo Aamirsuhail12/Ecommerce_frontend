@@ -26,7 +26,7 @@ const Sidebar = () => {
         try {
 
             const response = await getAll('http://localhost:5000/subcategory?page=-1')
-            setsubcategorylist(response.data.subcategory)
+            setsubcategorylist(response?.data?.subcategory)
         } catch (error) {
 
             console.log('Error in getting subcategory', error);
@@ -38,7 +38,7 @@ const Sidebar = () => {
         try {
             const response = await getAll('http://localhost:5000/products?page=-1')
 
-            const brands = response.data.products && [...new Set(response.data.products.map(p => p.brand))]
+            const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
             setbrands(brands);
         } catch (error) {
             console.log('Error in getting product brands', error);
@@ -58,7 +58,7 @@ const Sidebar = () => {
         GetProductsBrands();
     }, [mycontext.listingfilter])
 
-    // console.log('listfil', mycontext.listingfilter)
+
     return (
         <div className='sticky flex flex-col gap-5'>
             <FormControl>
@@ -71,10 +71,10 @@ const Sidebar = () => {
                     <ul className='overflow-x-hidden max-h-[250px]'>
 
                         {
-                            subcategorylist && subcategorylist.map((scat) => {
+                            subcategorylist && subcategorylist?.map((scat, index) => {
                                 return (
-                                    <li className="listitem flex justify-start items-center">
-                                        <FormControlLabel onChange={() => { selectedVal('subcategory', scat.subcategory) }} value={scat.subcategory} control={<Radio />} label={scat.subcategory} />
+                                    <li key={index} className="listitem flex justify-start items-center">
+                                        <FormControlLabel onChange={() => { selectedVal('subcategory', scat?.subcategory) }} value={scat?.subcategory} control={<Radio />} label={scat?.subcategory} />
                                     </li>
                                 )
                             })
@@ -128,9 +128,9 @@ const Sidebar = () => {
                     <ul className='overflow-x-hidden max-h-[250px]'>
 
                         {
-                            brands && brands.map((b) => {
+                            brands && brands?.map((b, index) => {
                                 return (
-                                    <li className="listitem flex justify-start items-center">
+                                    <li key={index} className="listitem flex justify-start items-center">
                                         <FormControlLabel onChange={() => selectedVal('brand', b)} value={b} control={<Radio />} label={b} />
                                     </li>
                                 )

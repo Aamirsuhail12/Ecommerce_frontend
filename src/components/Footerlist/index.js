@@ -1,4 +1,4 @@
-import React from "react";
+
 import "./index.css"; // Import your CSS file for styling
 
 const Footerlist = () => {

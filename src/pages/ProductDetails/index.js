@@ -1,52 +1,202 @@
 
-
-
 import { Rating } from '@mui/material';
-import React, { useState } from "react";
-import Slider from "react-slick";
-import apple_img from '../../assets/apple.jpg';
+import { useContext, useMemo, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 import { Button } from '@mui/material';
 import { IoIosHeart } from "react-icons/io";
 import { MdCompareArrows } from "react-icons/md";
 import RelatedProducts from '../../components/RelatedProducts';
+import { useLocation, useParams } from 'react-router';
+import { useEffect } from 'react';
+import { getAll, update } from '../../RestApi';
+import RecentlyViewed from '../../components/RecentlyViewed';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { Mycontext } from '../../App';
+import _Swiper from '../../components/Swiper';
 
 const ProductDetails = () => {
 
-    const [Btn, setBtn] = useState(null);
+    console.log('pro')
+
+    const context = useContext(Mycontext)
+    const [ramSelected, setRamSelected] = useState(null);
+    const [weightSelected, setWeightSelected] = useState(null);
+    const [sizeSelected, setSizeSelected] = useState(null);
     const [Btn1, setBtn1] = useState(null);
-
+    const [product, setProduct] = useState({});
+    const sectionRef = useRef(null);
     const [count, setCount] = useState(1);
-    var settings = {
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        customPaging: i => (
-            <img
-                className='border-2'
-                src={apple_img}
-                alt="apple"
-            />
-        ),
-    };
 
+    const [isloading, setIsloading] = useState(false);
+    const { id } = useParams();
+
+    const [cart, setCart] = useState({
+        product: id,
+        quantity: 1,
+        size: '',
+        weight: '',
+        RAM: ''
+    })
+
+    const location = useLocation();
+    const data = useMemo(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const rawData = queryParams.get('data');
+        return rawData ? JSON.parse(decodeURIComponent(rawData)) : null;
+    }, [location.search])
+
+    const handleCount = async (count) => {
+        setCount(count)
+        setCart({
+            ...cart,
+            quantity: count
+        })
+    }
+    const AddRAM = async (idx, val) => {
+        setRamSelected(idx);
+        setCart({
+            ...cart,
+            RAM: val
+        })
+    }
+
+    const AddWeight = async (idx, val) => {
+        setWeightSelected(idx)
+        setCart({
+            ...cart,
+            weight: val
+        })
+    }
+    const AddSize = async (idx, val) => {
+        setSizeSelected(idx)
+        setCart({
+            ...cart,
+            size: val
+        })
+    }
+
+    const GetProduct = async () => {
+        try {
+            const response = await getAll(`http://localhost:5000/products/${id}`);
+            setProduct(response?.data);
+        } catch (error) {
+            console.log('Error in getting product', error)
+        }
+    }
+
+    const AddToCart = async () => {
+
+        if (!cart?.product) {
+            context.setalertBox({
+                open: true,
+                color: 'error',
+                msg: 'Product id is required'
+            })
+            return;
+        }
+        if (!cart?.quantity) {
+            context.setalertBox({
+                open: true,
+                color: 'error',
+                msg: 'Quantity is required'
+            })
+            return;
+        }
+        if (product?.RAM?.length > 0 && cart?.RAM === '') {
+            context.setalertBox({
+                open: true,
+                color: 'error',
+                msg: 'Product RAM is required'
+            })
+            return;
+        }
+        if (product?.weight?.length > 0 && cart?.weight === '') {
+            context.setalertBox({
+                open: true,
+                color: 'error',
+                msg: 'Product Weight is required'
+            })
+            return;
+        }
+        if (product?.size?.length > 0 && cart?.size === '') {
+            context.setalertBox({
+                open: true,
+                color: 'error',
+                msg: 'Product size is required'
+            })
+            return;
+        }
+        try {
+            setIsloading(true)
+            const response = await update('http://localhost:5000/users/cart/add', cart);
+            context.setalertBox({
+                open: true,
+                color: 'success',
+                msg: response?.data?.msg
+            })
+            setIsloading(false)
+            context.setTotalCart(response?.data?.cart?.length)
+            setCart({
+                product: id,
+                quantity: 1,
+                size: '',
+                weight: '',
+                RAM: ''
+            })
+            setSizeSelected(null);
+            setWeightSelected(null);
+            setRamSelected(null);
+            setCount(1)
+        } catch (error) {
+            console.log('Error in adding product to cart', error?.response?.data?.msg);
+            context.setalertBox({
+                open: true,
+                color: 'error',
+                msg: error?.response?.data?.msg
+            })
+            setIsloading(false)
+        }
+    }
+
+    useEffect(() => {
+
+        setBtn1(null);
+        GetProduct();
+        setSizeSelected(null);
+        setWeightSelected(null);
+        setRamSelected(null);
+        // window.scrollTo({ top: 250, behavior: 'smooth' });//top : 250px
+        sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        setCart({
+            product: id,
+            quantity: 1,
+            size: '',
+            weight: '',
+            RAM: ''
+        })
+
+    }, [id])
+
+    useEffect(() => {
+        console.log('use1')
+        if (data) {
+            setCart({
+                product: id,
+                quantity: data?.quantity,
+                size: data?.size,
+                weight: data?.weight,
+                RAM: data?.RAM
+            })
+            setCount(data?.quantity)
+        }
+    }, [id, data])
 
     function handleRender() {
         if (Btn1 === 0)
-            return <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-
-                $20 discount for your first order
-
-                Join our newsletter and get...
-                Join our email subscription now to get updates on
-                promotions and coupons.
-
-                Your Email Address
-            </p>
+            return <p>{product?.description}</p>
 
         if (Btn1 === 1)
             return <table
@@ -97,9 +247,9 @@ const ProductDetails = () => {
             </table>
 
         if (Btn1 === 2)
-            return <div className='w-[70%] flex flex-col gap-5'>
+            return <div className='w-[100%%] flex flex-col justify-start items-start gap-5'>
 
-                <h3 className='font-semibold text-[25px]'>Customer questions & answers</h3>
+                <h3 className='font-semibold text-[20px]'>Customer questions & answers</h3>
                 <div className='flex items-start justify-between'>
                     <ul>
                         <li>Ali jutt</li>
@@ -118,182 +268,172 @@ const ProductDetails = () => {
                     <textarea className='h-[200px] w-full shadow p-5 rounded-[10px] outline-none' placeholder='Write a Review'></textarea>
                 </form>
                 <Rating
-                        value={5}
-                        precision={0.5}
-                    />
+                    value={5}
+                    precision={0.5}
+                />
                 <Button style={{
-                    width : '180px',
-                    backgroundColor : 'blue',
-                    color : 'white',
-                    borderRadius : '30px',
-                    fontWeight : 'bold',
-                    padding : '10px 0px',
-                    marginTop : '20px',
-                    marginBottom : '20px'
+                    width: '180px',
+                    backgroundColor: 'blue',
+                    color: 'white',
+                    borderRadius: '30px',
+                    fontWeight: 'bold',
+                    padding: '10px 0px',
+                    marginTop: '20px',
+                    marginBottom: '20px'
                 }}>Submit Review</Button>
             </div>;
     }
 
     return (
-        <div className='product_dialog body_ shadow'>
+        <div ref={sectionRef} className='relative py-4 space shadow'>
             <div>
-                <h1 className='font-bold text-[25px]'>All Natural Italian-Style Chicken Meatballs</h1>
+                <h1 className='font-bold text-[25px]'>{product?.name}</h1>
                 <div className='flex gap-5'>
-                    <span>Brands: Welch's</span>
+                    <span>Brands: {product?.brand}</span>
                     <Rating
-                        value={5}
+                        value={Number(product?.rating)}
                         precision={0.5}
                     />
-                    <span>REVIEW</span>
-                    <span>SKU:ZU49VOR</span>
                 </div>
             </div>
             <hr className='mt-5 mb-5' />
-            <div className='flex'>
-                <div className='relative md:w-5/12 h-auto'>
-                    <Button
-                        style={{
-                            backgroundColor: ' #00BFFF',
-                            color: 'white',
-                            position: 'absolute',
-                            top: '0px',
-                            left: '10px'
-                        }}
-                    >28%</Button>
-                    <Slider {...settings} >
-                        <div>
-                            <img
-                                className='mx-auto'
-                                height="200px"
-                                width="200px"
-                                src={apple_img}
-                                alt="apple"
-                            />
-                        </div>
-                        <div className='slider_item'>
-                            <img
-                                className='mx-auto'
-                                height="200px"
-                                width="200px"
-                                src={apple_img}
-                                alt="apple"
-                            />
-                        </div>
-                        <div className='slider_item'>
-                            <img
-                                className='mx-auto'
-                                height="200px"
-                                width="200px"
-                                src={apple_img}
-                                alt="apple"
-                            />
-                        </div>
-                        <div className='slider_item'>
-                            <img
-                                className='mx-auto'
-                                height="200px"
-                                width="200px"
-                                src={apple_img}
-                                alt="apple"
-                            />
-                        </div>
-                    </Slider>
-                </div>
-                <div className='md:w-7/12 flex flex-col gap-5'>
+            <div className='flex justify-between items-start flex-wrap md:flex-nowrap  gap-8'>
+                <div className='relative w-full md:w-5/12 mb-[10px] md:mb-[150px]'>
 
-                    <div>
-                        <span><del>$9.35</del></span>
-                        <span className='ml-4 text-red-800 font-bold'>$7.25</span>
-                    </div>
-                    <span style={{ backgroundColor: '#90EE90', color: 'green', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '90px', borderRadius: '20px', padding: '5px' }}>IN STOCK</span>
-                    <p>
-                        Vivamus adipiscing nist ut dolor dignissim semper.Nulia luctus malesauda tincidunt.Class aptent taciti.
-                    </p>
+                    <_Swiper product={product}></_Swiper>
+
+                </div>
+                <div className='w-full  md:w-7/12 flex flex-col items-start gap-5 '>
 
                     <div className='flex gap-5 items-center'>
-                        <h4>Size/Weight:</h4>
-                        <ul className='flex gap-5'>
-                            <li
-                                className={`border-2 px-3 py-1  ${Btn === 0 ? 'active' : ''}`}
-                                onClick={() => {
-                                    setBtn(0)
-                                }}
-                            ><a>50g</a></li>
-                            <li
-                                className={`border-2 px-3 py-1  ${Btn === 1 ? 'active' : ''}`}
-                                onClick={() => {
-                                    setBtn(1)
-                                }}
-                            ><a>100g</a></li>
-                            <li
-                                className={`border-2 px-3 py-1 ${Btn === 2 ? 'active' : ''}`}
-                                onClick={() => {
-                                    setBtn(2)
-                                }}
-                            ><a>200g</a></li>
-                            <li
-                                className={`border-2 px-3 py-1 ${Btn === 3 ? 'active' : ''}`}
-                                onClick={() => {
-                                    setBtn(3)
-                                }}
-                            ><a>400g</a></li>
-                            <li
-                                className={`border-2 px-3 py-1 ${Btn === 4 ? 'active' : ''}`}
-                                onClick={() => {
-                                    setBtn(4)
-                                }}
-                            ><a>500g</a></li>
-                        </ul>
+                        <span><del>Rs{product?.oldPrice}</del></span>
+                        <span className='ml-4 text-red-800 font-bold'>Rs{product?.price}</span>
+                        <Button
+                            sx={{
+                                backgroundColor: '#90EE90',
+                                color: 'black',
+                                paddingX: {
+                                    xs: '2px',
+                                    sm: '10px',
+                                    lg: '25px',
+                                },
+                                textTransform: 'none',
+                                fontWeight: 'bold',
+                                borderRadius: '20px'
+                            }}
+
+                        >{product?.discount}% off</Button>
                     </div>
-                    <div className='flex gap-10'>
+                    <span className="bg-[#90EE90] text-green-600 font-bold flex justify-center items-center w-[200px] rounded-[20px] p-[5px]">
+                        IN STOCK
+                    </span>
+
+                    <p>
+                        {product?.description}
+                    </p>
+
+
+                    <div className='flex gap-3 flex-wrap lg:flex-nowrap items-center'>{
+                        product?.RAM?.map((ram, index) => {
+
+                            return (
+                                <div onClick={() => AddRAM(index, ram)} key={index} className={`${index === ramSelected ? 'active' : ''} ${index !== ramSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{ram}</div>
+                            )
+                        })}
+                    </div>
+
+                    <div className='flex gap-3 flex-wrap lg:flex-nowrap items-center'>{
+                        product?.weight?.map((w, index) => {
+
+                            return (
+                                <div onClick={() => AddWeight(index, w)} key={index} className={`${index === weightSelected ? 'active' : ''} ${index !== weightSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800  px-2 py-[2px] font-semibold rounded-full`}>{w}</div>
+                            )
+                        })}
+                    </div>
+
+                    <div className='flex gap-3 flex-wrap lg:flex-nowrap items-center'>{
+                        product?.size?.map((s, index) => {
+
+                            return (
+                                <div onClick={() => AddSize(index, s)} key={index} className={`${index === sizeSelected ? 'active' : ''} ${index !== sizeSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{s}</div>
+                            )
+                        })}
+                    </div>
+
+
+                    <div className='flex gap-10 flex-wrap lg:flex-nowrap items-center'>
                         <div className='flex justify-center items-center gap-5'>
                             <button className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'
                                 onClick={() => {
                                     if (count > 1)
-                                        setCount(count - 1);
+                                        handleCount(count - 1);
                                 }}
                             ><FaMinus /></button>
                             <span>{count}</span>
                             <button
                                 onClick={() => {
-                                    setCount(count + 1);
+                                    handleCount(count + 1);
                                 }}
-                                className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'><FaPlus /></button>
+                                className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'>
+                                <FaPlus /></button>
                         </div>
-                        <Button style={{
-                            backgroundColor: 'blue',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            borderRadius: '50px',
-                            paddingLeft: '40px',
-                            paddingRight: '40px'
-                        }}>Add to cart</Button>
+                        {
+                            isloading === true ?
+                                <Button sx={{
+                                    backgroundColor: 'blue',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    borderRadius: '50px',
+                                    px: {
+                                        sm: '10px',
+                                        md: '20px',
+                                        lg: '40px'
+                                    },
+                                    py: {
+                                        sm: '5px',
+                                        md: '10px'
+                                    }
+                                }}>
+                                    Add to cart <Box sx={{ display: 'flex' }}>
+                                        <CircularProgress size={25} className='ml-4 text-white' />
+                                    </Box></Button>
+                                :
+                                <Button onClick={(e) => {
+                                    e.stopPropagation();
+                                    AddToCart()
+                                }}
+                                    sx={{
+                                        backgroundColor: 'blue',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        borderRadius: '50px',
+                                        px: '40px',
+                                        py: '10px'
+                                    }}
+
+                                >Add to cart</Button>
+                        }
+
                     </div>
-                    <div className='flex gap-5'>
-                        <Button style={{
+                    <div className='flex gap-5 flex-wrap lg:flex-nowrap items-center'>
+                        <Button sx={{
                             border: '1px solid black',
                             color: 'black',
                             fontWeight: 'bold',
                             borderRadius: '50px',
-                            paddingLeft: '10px',
-                            paddingRight: '10px'
-                        }}><IoIosHeart style={{
-                            height: '30px',
-                            width: '30px',
-                            marginRight: '10px'
-                        }} />Add to Wishlist</Button>
-                        <Button style={{
+                            px: '10px'
+                        }}>
+                            <IoIosHeart className='h-[15px] md:h-[30px] w-[15px] md:w-[30px] mr-[10px]'
+                            />Add to Wishlist</Button>
+                        <Button sx={{
                             border: '1px solid black',
                             color: 'black',
                             fontWeight: 'bold',
                             borderRadius: '50px',
-                            paddingLeft: '10px',
-                            paddingRight: '10px'
-                        }}><MdCompareArrows style={{
-                            height: '30px',
-                            width: '30px',
-                            marginRight: '10px'
-                        }} />COMPARE</Button>
+                            px: '10px'
+                        }}>
+                            <MdCompareArrows className='h-[30px] w-[30px] mr-[10px]' />COMPARE
+                        </Button>
                         <hr></hr>
                     </div>
                 </div>
@@ -301,21 +441,24 @@ const ProductDetails = () => {
 
             <div className='bg-[#f7f2ff] info mt-12 p-10 rounded-[20px] border-2'>
                 <div className='flex items-center gap-5 mb-10'>
+                    <Box className="hidden md:block">
+                        <Button
+                            onClick={() => {
+                                setBtn1(0);
+                            }}
+                            className={`${Btn1 === 0 ? 'active' : ''} `}
+                            style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                borderRadius: '50px',
+                                paddingLeft: '40px',
+                                paddingRight: '40px',
+                                border: '1px solid black'
+                            }}>Description</Button>
+                    </Box>
+                    <Box className='hidden md:block'>
                     <Button
-                        onClick={() => {
-                            setBtn1(0);
-                        }}
-                        className={`${Btn1 === 0 ? 'active' : ''}`}
-                        style={{
-                            color: 'black',
-                            fontWeight: 'bold',
-                            borderRadius: '50px',
-                            paddingLeft: '40px',
-                            paddingRight: '40px',
-                            border: '1px solid black'
-                        }}>Description</Button>
-                    <Button
-                        className={`${Btn1 === 1 ? 'active' : ''}`}
+                        className={`${Btn1 === 1 ? 'active' : ''} hidden md:block`}
                         onClick={() => {
                             setBtn1(1);
                         }}
@@ -327,6 +470,7 @@ const ProductDetails = () => {
                             paddingRight: '40px',
                             border: '1px solid black'
                         }}>Additional Info</Button>
+                        </Box>
                     <Button
                         className={`${Btn1 === 2 ? 'active' : ''}`}
                         onClick={() => {
@@ -346,8 +490,8 @@ const ProductDetails = () => {
                 }
             </div>
 
-            <RelatedProducts title='Related Products'/>
-            <RelatedProducts title='Recently Viewed Products'/>
+            <RelatedProducts product={product} />
+            <RecentlyViewed productId={id} />
         </div>
     )
 }
