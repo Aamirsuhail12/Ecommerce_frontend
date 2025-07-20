@@ -5,6 +5,7 @@ import sliderbanner2 from '../../assets/sliderbanner2.jpeg'
 import sliderbanner3 from '../../assets/sliderbanner3.jpeg'
 const Slider_ = () => {
 
+  console.log('Slider');
   var settings = {
     dots: false,
     infinite: true,

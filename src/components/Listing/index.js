@@ -6,37 +6,26 @@ import { BsGrid3X3Gap } from "react-icons/bs";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa6";
 import Button from '@mui/material/Button';
-import { useContext, useEffect, useRef, useState } from "react";
-import Pagination from '@mui/material/Pagination';
-import { Mycontext } from "../../App";
-import { getAll } from "../../RestApi";
+import {  useEffect, useRef, useState } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../features/product/productAPI";
 const Listing = () => {
 
+    console.log('Listing');
+    const dispatch = useDispatch();
     const targetElement = useRef(null);//scroll to this element.
     const [productview, setProductview] = useState('two');
-    const [products, setProducts] = useState([]);
-
-    const mycontext = useContext(Mycontext);
-
-    console.log('listing filter in frontend', mycontext.listingfilter)
-    const GetProducts = async () => {
-
-        try {
-            const response = await getAll(`http://localhost:5000/products?page=-1&filter=${encodeURIComponent(JSON.stringify(mycontext.listingfilter))}`);
-            setProducts(response?.data?.products);
-        } catch (error) {
-            console.log('Error occur in getting Products', error);
-        }
-    }
+    const products = useSelector((state)=> state.products.items);
+    const filter = useSelector((state)=>state?.filter);
 
     useEffect(() => {
         targetElement?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, [products])
 
     useEffect(() => {
-        GetProducts();
-    }, [mycontext?.listingfilter])
+        dispatch(fetchProducts(filter));
+    }, [filter])
 
     return (
         <div className="flex relative space">
@@ -78,13 +67,12 @@ const Listing = () => {
                 </div>
                 <div ref={targetElement} className="flex flex-wrap justify-start gap-3 items-center">
                     {
-                        products && products?.map((p, index) => {
+                        products?.map((p, index) => {
                             return <Card key={index} productview={productview} product={p} />
                         })
                     }
 
                 </div>
-                <Pagination count={10} color="primary" size="large" />
 
             </div>
         </div>

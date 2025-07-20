@@ -1,36 +1,41 @@
 
-import { Mycontext } from "../../App";
-import { useContext, useEffect, useState } from "react";
-import { getAll } from "../../RestApi";
+import { useEffect } from "react";
 import Card from "../Card";
 import Pagination from '@mui/material/Pagination';
+import { useDispatch, useSelector } from "react-redux";
+import { setHeaderFooterVisibility } from "../../features/ui/uiSlice";
+import { fetchProducts } from "../../features/product/productAPI";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const ViewAllProducts = () => {
 
-    const [products, setProducts] = useState([]);
-    const context = useContext(Mycontext);
+    console.log('ViewAllProducts');
+    const dispatch = useDispatch();
+    const { items, status, error } = useSelector((state) => state.products);
+    const featuredProducts = items.filter((p) => p.isFeatured === true);
 
-    const GetProducts = async () => {
-        try {
-
-            const response = await getAll('http://localhost:5000/products?page=-1');
-
-            const pro = response?.data?.products && response?.data?.products?.filter((p) => p?.isFeatured === true)
-            setProducts(pro);
-        } catch (error) {
-            console.log('Error in getting Products', error);
-        }
-    }
     useEffect(() => {
-        context.setisheaderfooterShow(true);
-        GetProducts();
+        dispatch(setHeaderFooterVisibility(true));
+        dispatch(fetchProducts());
     }, [])
     return (
         <div className="space">
             <div className="font-bold text-[30px]"> Special Products</div>
             <div className="flex flex-wrap justify-center items-start gap-3 md:gap-5">
                 {
-                    products.map((p,index) => {
+                    status === 'loading' &&
+                    <Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
+                    </Box>
+                }
+                {
+                    status === 'failed' &&
+                    <div className="text-[25px] md:text-[50px] text-red-600 font-bold">{error}</div>
+                }
+                {
+                    status === 'succeeded' &&
+                    featuredProducts?.map((p, index) => {
                         return <Card key={index} product={p} />
                     })
                 }

@@ -9,13 +9,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { create } from "../../RestApi";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-
+import { setHeaderFooterVisibility } from "../../features/ui/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { showAlert, closeAlert } from "../../features/alert/alertSlice";
+import { signUp } from "../../features/user/userAPI";
 const SignUp = () => {
 
-    const context = useContext(Mycontext);
+    console.log("SignUp");
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useSelector((state) => state.user);
 
-    const [isloading, setIsloading] = useState(false);
     const [payload, setPayload] = useState({
         name: '',
         phone: '',
@@ -36,31 +40,31 @@ const SignUp = () => {
         e.preventDefault();
 
         if (!payload?.name || !payload?.phone || !payload?.email || !payload?.password || !payload?.confirmPassword) {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Please fill all the details'
-            })
+            }))
+
             return;
         }
 
         if (payload?.password !== payload?.confirmPassword) {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Confirm Password does not matched!'
-            })
+            }))
+
             return;
         }
 
         try {
-            setIsloading(true)
-            const response = await create('http://localhost:5000/auth/signup', payload)
-            context.setalertBox({
-                open: true,
+        
+            await dispatch(signUp(payload)).unwrap();
+            dispatch(showAlert({
                 color: 'success',
-                msg: response?.data?.msg
-            })
+                msg: 'Register Successful!'
+            }))
+
             setPayload({
                 name: '',
                 phone: '',
@@ -69,23 +73,21 @@ const SignUp = () => {
                 confirmPassword: '',
                 isAdmin: false
             })
-            setIsloading(false)
             navigate('/');
 
         } catch (error) {
-            setIsloading(false)
             console.log('Error in Sign Up', error);
-            context?.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
-                msg: error?.response?.data?.msg
-            })
+                msg: error || "Error in Creating account"
+            }))
+
         }
 
     }
 
     useEffect(() => {
-        context.setisheaderfooterShow(false);
+        dispatch(setHeaderFooterVisibility(false));
     }, [])
     return (
         <div className="signup flex items-center justify-center">
@@ -116,7 +118,7 @@ const SignUp = () => {
                     </Box>
                     <div className="flex w-full gap-5 justify-between">
                         {
-                            isloading === true ?
+                            user.status === 'loading' ?
                                 <Button type="submit" sx={{
                                     width: '100%',
                                     backgroundColor: '#007bff',

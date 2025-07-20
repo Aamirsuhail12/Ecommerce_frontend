@@ -1,6 +1,6 @@
 
 import { Rating } from '@mui/material';
-import { useContext, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 import { Button } from '@mui/material';
@@ -13,23 +13,24 @@ import { getAll, update } from '../../RestApi';
 import RecentlyViewed from '../../components/RecentlyViewed';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import { Mycontext } from '../../App';
 import _Swiper from '../../components/Swiper';
+import { useDispatch, useSelector } from 'react-redux';
+import { showAlert } from '../../features/alert/alertSlice';
+import { fetchProduct } from '../../features/product/productAPI';
+import { addCart } from '../../features/user/userAPI';
 
 const ProductDetails = () => {
 
-    console.log('pro')
-
-    const context = useContext(Mycontext)
+    console.log('ProductDetails');
+    const dispatch = useDispatch();
+    const product = useSelector((state) => state?.products?.singleItem);
+    const status = useSelector((state)=> state.products.status);
     const [ramSelected, setRamSelected] = useState(null);
     const [weightSelected, setWeightSelected] = useState(null);
     const [sizeSelected, setSizeSelected] = useState(null);
     const [Btn1, setBtn1] = useState(null);
-    const [product, setProduct] = useState({});
     const sectionRef = useRef(null);
     const [count, setCount] = useState(1);
-
-    const [isloading, setIsloading] = useState(false);
     const { id } = useParams();
 
     const [cart, setCart] = useState({
@@ -39,13 +40,6 @@ const ProductDetails = () => {
         weight: '',
         RAM: ''
     })
-
-    const location = useLocation();
-    const data = useMemo(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const rawData = queryParams.get('data');
-        return rawData ? JSON.parse(decodeURIComponent(rawData)) : null;
-    }, [location.search])
 
     const handleCount = async (count) => {
         setCount(count)
@@ -78,66 +72,58 @@ const ProductDetails = () => {
     }
 
     const GetProduct = async () => {
-        try {
-            const response = await getAll(`http://localhost:5000/products/${id}`);
-            setProduct(response?.data);
-        } catch (error) {
-            console.log('Error in getting product', error)
-        }
+        dispatch(fetchProduct(id));
     }
 
     const AddToCart = async () => {
 
         if (!cart?.product) {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product id is required'
-            })
+            }))
+
             return;
         }
         if (!cart?.quantity) {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Quantity is required'
-            })
+            }))
             return;
         }
         if (product?.RAM?.length > 0 && cart?.RAM === '') {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product RAM is required'
-            })
+            }))
+
             return;
         }
         if (product?.weight?.length > 0 && cart?.weight === '') {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product Weight is required'
-            })
+            }))
+
             return;
         }
         if (product?.size?.length > 0 && cart?.size === '') {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product size is required'
-            })
+            }))
+
             return;
         }
         try {
-            setIsloading(true)
-            const response = await update('http://localhost:5000/users/cart/add', cart);
-            context.setalertBox({
-                open: true,
+
+            await dispatch(addCart(cart)).unwrap();
+            dispatch(showAlert({
                 color: 'success',
-                msg: response?.data?.msg
-            })
-            setIsloading(false)
-            context.setTotalCart(response?.data?.cart?.length)
+                msg: "Product added to cart successfull!"
+            }))
+
             setCart({
                 product: id,
                 quantity: 1,
@@ -150,13 +136,11 @@ const ProductDetails = () => {
             setRamSelected(null);
             setCount(1)
         } catch (error) {
-            console.log('Error in adding product to cart', error?.response?.data?.msg);
-            context.setalertBox({
-                open: true,
+            console.log('Error in adding product to cart', error);
+            dispatch(showAlert({
                 color: 'error',
-                msg: error?.response?.data?.msg
-            })
-            setIsloading(false)
+                msg: error
+            }))
         }
     }
 
@@ -180,19 +164,6 @@ const ProductDetails = () => {
 
     }, [id])
 
-    useEffect(() => {
-        console.log('use1')
-        if (data) {
-            setCart({
-                product: id,
-                quantity: data?.quantity,
-                size: data?.size,
-                weight: data?.weight,
-                RAM: data?.RAM
-            })
-            setCount(data?.quantity)
-        }
-    }, [id, data])
 
     function handleRender() {
         if (Btn1 === 0)
@@ -378,7 +349,8 @@ const ProductDetails = () => {
                                 <FaPlus /></button>
                         </div>
                         {
-                            isloading === true ?
+                            status === 'loading'
+                             ?
                                 <Button sx={{
                                     backgroundColor: 'blue',
                                     color: 'white',
@@ -457,20 +429,20 @@ const ProductDetails = () => {
                             }}>Description</Button>
                     </Box>
                     <Box className='hidden md:block'>
-                    <Button
-                        className={`${Btn1 === 1 ? 'active' : ''} hidden md:block`}
-                        onClick={() => {
-                            setBtn1(1);
-                        }}
-                        style={{
-                            color: 'black',
-                            fontWeight: 'bold',
-                            borderRadius: '50px',
-                            paddingLeft: '40px',
-                            paddingRight: '40px',
-                            border: '1px solid black'
-                        }}>Additional Info</Button>
-                        </Box>
+                        <Button
+                            className={`${Btn1 === 1 ? 'active' : ''} hidden md:block`}
+                            onClick={() => {
+                                setBtn1(1);
+                            }}
+                            style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                borderRadius: '50px',
+                                paddingLeft: '40px',
+                                paddingRight: '40px',
+                                border: '1px solid black'
+                            }}>Additional Info</Button>
+                    </Box>
                     <Button
                         className={`${Btn1 === 2 ? 'active' : ''}`}
                         onClick={() => {

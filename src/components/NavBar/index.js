@@ -10,15 +10,18 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from "react-slick";
 
-import { useContext, useEffect, useState, useRef } from "react";
-import { getAll } from "../../RestApi";
-import { Mycontext } from "../../App";
+import {  useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchCategories } from "../../features/category/categoryAPI";
+import { resetFilter } from "../../features/filter/filterSlice";
+import { setCategory } from "../../features/filter/filterSlice";
 const NavBar = () => {
 
-  const [categorylist, setcategorylist] = useState([]);
+  const dispatch = useDispatch();
+  // const filter = useSelector((state) => state?.filter);
+  const categorylist = useSelector((state) => state?.categories?.items);
   const sliderRef = useRef(null);
-
-  const mycontext = useContext(Mycontext);
 
   //menu start
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -74,27 +77,24 @@ const NavBar = () => {
 
   const selectedfilter = (key, value) => {
 
-    mycontext.setlistingfilter({ [key]: value });
-  }
-
-  const GetCategory = async () => {
-    try {
-
-      const response = await getAll('http://localhost:5000/categories?page=-1')
-      setcategorylist(response?.data?.categories)
-      setTimeout(() => {
-        if (sliderRef.current) {
-          sliderRef.current.slickGoTo(0); // force refresh to 1st slide
-        }
-      }, 1000);
-    } catch (error) {
-
-      console.log('Error in getting categories', error);
+    if (key === 'category') {
+      dispatch(resetFilter());
     }
+    dispatch(setCategory(value));
   }
+
+
   useEffect(() => {
-    GetCategory();
+    dispatch(fetchCategories());
   }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      sliderRef?.current?.slickGoTo(0);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [categorylist])
   return (
     <>
       <div className='flex justify-between items-center gap-5'>
@@ -179,7 +179,9 @@ const NavBar = () => {
                           boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)',  // stronger shadow
                         },
                       }}
-                        onClick={() => { selectedfilter('category', cat?.name) }}>{cat?.name?.length > 10 ? cat?.name?.substr(0, 10) + '...' : cat?.name}</Button>
+                        onClick={() => {
+                          selectedfilter('category', cat?.name)
+                        }}>{cat?.name?.length > 10 ? cat?.name?.substr(0, 10) + '...' : cat?.name}</Button>
 
                     </Link>
                   </div>

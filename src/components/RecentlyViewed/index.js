@@ -54,7 +54,7 @@ const RecentlyViewed = ({ productId }) => {
      const PatchedUser = async () => {
           try {
                const response = await update('http://localhost:5000/users/create/recently-viewed', { id: productId })
-               // console.log('rec', response.data);
+               
 
           } catch (error) {
                console.log('Error in patching user', error.response.data.msg);

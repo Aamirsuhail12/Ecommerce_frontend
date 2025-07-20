@@ -9,6 +9,8 @@ import { Button, Box } from '@mui/material';
 
 const Header = () => {
 
+    
+    console.log('Header');
     return (
         <div>
             <div className="flex flex-col items-center justify-start w-full min-h-24 md:min-h-32 lg:min-h-40 ">

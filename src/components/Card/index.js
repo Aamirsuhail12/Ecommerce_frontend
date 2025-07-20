@@ -25,7 +25,7 @@ const Card = ({ productview, product }) => {
     return (
 
 
-        <div style={{ backgroundColor: product?.category?.color }} className={`${productview} group relative h-[250px] w-[160px] sm:h-[280px] sm:w-[180px]  md:h-[300px] md:w-[210px]  lg:w-[230px] p-2 pt-8 rounded-3xl -translate-y-1 shadow-lg `}>
+        <div style={{ backgroundColor: product?.category?.color }} className={`${productview}  group relative flex flex-col  h-[250px] w-[160px] sm:h-[280px] sm:w-[180px]  md:h-[300px] md:w-[210px]  lg:w-[230px] p-2 pt-8 rounded-3xl -translate-y-1 shadow-lg `}>
             <div onClick={(e) => {
                 e.stopPropagation();
                 ProductDetails(product._id)

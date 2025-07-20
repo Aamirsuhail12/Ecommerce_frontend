@@ -1,18 +1,20 @@
 
 import Slider from "react-slick";
 import Card from '../Card';
-import { useEffect, useContext, useState, useRef } from 'react';
-import { getAll } from '../../RestApi';
-import { Mycontext } from '../../App';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../features/product/productAPI";
 
 const SelectedProducts = () => {
 
-  const [products, setProducts] = useState([]);
+  console.log('SelectedProducts');
+  const filter = useSelector((state) => state.filter);
+  const products = useSelector((state) => state.products.items);
   const sliderRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const mycontext = useContext(Mycontext);
   var settings = {
-    centerMode : false,
+    centerMode: false,
     dots: false,
     infinite: false,
     speed: 500,
@@ -53,29 +55,19 @@ const SelectedProducts = () => {
 
   };
 
-  const GetProducts = async () => {
-    try {
-      const response = await getAll(`http://localhost:5000/products?page=-1`)
 
-      const products = response?.data?.products?.filter((product) => {
-        return product?.category?.name === mycontext?.filter
-      }
-      )
-      setProducts(products)
-
-      setTimeout(() => {
-        sliderRef?.current?.slickGoTo(0);
-      }, 1000)
-
-    } catch (error) {
-
-      console.log('Error in getting Products', error);
-    }
-  }
 
   useEffect(() => {
-    GetProducts();
-  }, [mycontext?.filter]);
+    dispatch(fetchProducts(filter));
+  }, [filter]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      sliderRef?.current?.slickGoTo(0);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [products])
 
 
   return (
@@ -83,7 +75,7 @@ const SelectedProducts = () => {
 
       <div className='flex flex-col items  gap-7'>
         <div>
-          <h2 className='font-bold text-xl capitalize'>{mycontext?.filter} Products</h2>
+          <h2 className='font-bold text-xl capitalize'>{filter?.category} Products</h2>
           <p className='opacity-50'>Do not miss the current offer untill the end of march.</p>
         </div>
         <div>

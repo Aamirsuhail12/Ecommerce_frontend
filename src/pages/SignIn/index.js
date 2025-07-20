@@ -1,22 +1,24 @@
 
-import { useContext, useEffect } from "react";
-import { Mycontext } from "../../App";
+import { useEffect } from "react";
 import "./SignInPage.css";
 import TextField from '@mui/material/TextField';
 import { Button } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { create } from "../../RestApi";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-
+import { useDispatch, useSelector } from "react-redux";
+import { setHeaderFooterVisibility } from "../../features/ui/uiSlice";
+import { showAlert } from "../../features/alert/alertSlice";
+import { signIn } from "../../features/user/userAPI";
 const SignIn = () => {
 
-    const context = useContext(Mycontext);
+    console.log('SignIn');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useSelector((state)=>state.user);
 
-    const [isloading, setIsloading] = useState(false);
     const [payload, setPayload] = useState({
         email: '',
         password: ''
@@ -31,43 +33,42 @@ const SignIn = () => {
         e.preventDefault();
 
         if (!payload?.email || !payload?.password) {
-            context?.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Please fill all details!'
-            });
+            }))
             return;
         }
 
         try {
-            setIsloading(true);
-            const response = await create('http://localhost:5000/auth/signin', payload);
-            context.setalertBox({
-                open: true,
+            await dispatch(signIn(payload)).unwrap();
+            
+            dispatch(showAlert({
                 color: 'success',
-                msg: response?.data?.msg
-            })
+                msg: 'User Login successfull...'
+            }))
+
             setPayload({
                 email: '',
                 password: ''
             })
-            setIsloading(false)
+
             navigate('/')
 
         } catch (error) {
-            setIsloading(false)
+
             console.log('Error in Sign In', error);
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
-                msg: error?.response?.data?.msg
-            })
+                msg: error
+            }))
+
         }
 
     }
 
     useEffect(() => {
-        context.setisheaderfooterShow(false);
+        dispatch(setHeaderFooterVisibility(false));
     }, [])
     return (
         <div className="signin flex items-center justify-center">
@@ -90,7 +91,7 @@ const SignIn = () => {
 
                     <div className="flex w-full gap-5 justify-between">
                         {
-                            isloading === true ?
+                            user.status === 'loading' ?
                                 <Button type="submit" sx={{ width: '45%', backgroundColor: '#007bff', color: 'white', fontWeight: 'bold' }}>Sign In
                                     <Box sx={{ display: 'flex' }}>
                                         <CircularProgress size={30} style={{ color: 'white', marginLeft: '10px' }} />
@@ -106,8 +107,6 @@ const SignIn = () => {
                     <p className="font-semibold m-auto">Or continue with social account</p>
                     <Button sx={{ border: '1px solid', fontWeight: 'bold' }}><FcGoogle className="mr-[5px] text-[30px]" /> Sign in with Google</Button>
                 </form>
-
-
             </div>
         </div>
     )

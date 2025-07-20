@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react";
 import CatCard from "../CatCard";
 import Slider from "react-slick";
+import { fetchCategories } from "../../features/category/categoryAPI";
+import { useDispatch, useSelector } from "react-redux";
 
+const FeatureCat = () => {
 
-const FeatureCat = (props) => {
-
+    console.log('FeaturedCat');
+    const dispatch = useDispatch();
+    const categoryList = useSelector((state) => state?.categories?.items);
     const featuredCatRef = useRef(null);
     var settings = {
         infinite: false,
@@ -49,7 +53,8 @@ const FeatureCat = (props) => {
     useEffect(() => {
         setTimeout(() => {
             featuredCatRef?.current?.slickGoTo(0);
-        }, 1000)
+        }, 500)
+        dispatch(fetchCategories());
     }, [])
     return (
         <div>
@@ -57,7 +62,7 @@ const FeatureCat = (props) => {
             <div>
                 <Slider ref={featuredCatRef} {...settings} className="featuredcat">
                     {
-                        props?.categoryList?.map((item, index) => {
+                        categoryList?.map((item, index) => {
 
                             return (<div key={index} className="-translate-y-1 shadow-lg !flex !justify-center !items-center !h-[120px] w-[120px] md:!h-[150px] md:!w-[150px] ">
                                 <CatCard color={item?.color} name={item?.name} url={item?.images[0]}></CatCard>

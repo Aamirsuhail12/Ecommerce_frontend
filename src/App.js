@@ -1,8 +1,6 @@
 
 import './App.css';
 import Header from './components/header';
-import { createContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import Home from './pages/home';
 import Footer from './components/Footer';
 import Footerlist from './components/Footerlist';
@@ -15,79 +13,42 @@ import SignUp from './pages/SignUp';
 import ViewAllProducts from './components/ViewAllProducts';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeAlert } from './features/alert/alertSlice';
 
-
-const Mycontext = createContext();
 function App() {
 
-  const [countryList, setcountryList] = useState();
-  const [isheaderfooterShow, setisheaderfooterShow] = useState(true);
-  const [filter, setfilter] = useState('Electronics');
-  const [listingfilter, setlistingfilter] = useState();
-  const [totalCart, setTotalCart] = useState(0);
-  const [alertBox, setalertBox] = useState({
-    open: false,
-    color: '',
-    msg: ''
-  })
 
+  const ui = useSelector((state) => state.ui);
+  const alert = useSelector((state) => state.alert);
+  const dispatch = useDispatch();
 
-
-  async function fetchCountryList() {
-    try {
-      const response = await axios.get('http://localhost:5000/coutrylist');
-      setcountryList(Object.values(response?.data?.data));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const values = {
-    countryList,
-    isheaderfooterShow,
-    setisheaderfooterShow,
-    filter,
-    setfilter,
-    listingfilter,
-    setlistingfilter,
-    alertBox,
-    setalertBox,
-    totalCart,
-    setTotalCart
-  }
+  console.log('App');
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setalertBox({
-      open: false,
-      color: '',
-      msg: ''
-    })
+    dispatch(closeAlert());
   };
 
-  useEffect(() => {
-    fetchCountryList();
-  }, [])
 
   return (
-    <Mycontext.Provider value={values}>
-
-      <Snackbar open={alertBox?.open} autoHideDuration={6000} onClose={handleClose}>
+    <>
+      <Snackbar open={alert?.open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
-          severity={alertBox.color}
+          severity={alert.color}
           variant="filled"
           sx={{ width: '100%' }}
         >
-          {alertBox.msg}
+          {alert.msg}
         </Alert>
       </Snackbar>
 
       {
-        isheaderfooterShow === true && <Header />
+        ui.isHeaderFooterShow === true && <Header />
       }
 
       <Routes>
@@ -100,15 +61,13 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
       </Routes>
       {
-        isheaderfooterShow === true && <Footerlist />
+        ui.isHeaderFooterShow === true && <Footerlist />
       }
       {
-        isheaderfooterShow === true && <Footer />
+        ui.isHeaderFooterShow === true && <Footer />
       }
-    </Mycontext.Provider>
+    </>
   );
 }
 
 export default App;
-
-export { Mycontext };

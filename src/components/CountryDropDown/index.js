@@ -1,25 +1,31 @@
 import { Dialog } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useContext, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { IoSearchOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
-import { Mycontext } from '../../App';
-
+import axios from 'axios';
 
 const CountryDropDown = () => {
 
     const [isopen, setIsOpen] = useState(false);
     const [countryIndex, setcountryIndex] = useState(null);
     const [country, setcountry] = useState(null);
-    const context = useContext(Mycontext);
     const [countrylist, setcountrylist] = useState([]);
     const [originalCountrylist, setoriginalCountrylist] = useState([]);
 
+    async function fetchCountryList() {
+        try {
+            const response = await axios.get('http://localhost:5000/coutrylist');
+            setcountrylist(Object.values(response?.data?.data));
+            setoriginalCountrylist(Object.values(response?.data?.data))
+        } catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
+        fetchCountryList();
 
-        setcountrylist(context.countryList);
-        setoriginalCountrylist(context.countryList)
-    }, [context.countryList])
+    }, [])
 
     function CountryHandle(index, country_) {
         setcountryIndex(index);

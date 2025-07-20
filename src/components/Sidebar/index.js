@@ -11,21 +11,21 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { getAll } from '../../RestApi';
 import Checkbox from '@mui/material/Checkbox';
-import { Mycontext } from '../../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { setBrand, setPrice, setSubcategory } from '../../features/filter/filterSlice';
 
 const Sidebar = () => {
 
-    const [val, setval] = useState([500, 50000]);
+    const filter = useSelector((state) => state?.filter);
+
+    console.log('fil side', filter)
+    const dispatch = useDispatch();
     const [subcategorylist, setsubcategorylist] = useState([]);
     const [brands, setbrands] = useState([]);
 
-    const mycontext = useContext(Mycontext);
-
-    const GetSubCategoryList = async () => {
-
+    const GetSubCategoryList = async (category) => {
         try {
-
-            const response = await getAll('http://localhost:5000/subcategory?page=-1')
+            const response = await getAll(`http://localhost:5000/subcategory?page=-1&category=${JSON.stringify(category)}`)
             setsubcategorylist(response?.data?.subcategory)
         } catch (error) {
 
@@ -37,7 +37,6 @@ const Sidebar = () => {
 
         try {
             const response = await getAll('http://localhost:5000/products?page=-1')
-
             const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
             setbrands(brands);
         } catch (error) {
@@ -46,17 +45,24 @@ const Sidebar = () => {
     }
 
     const selectedVal = (key, value) => {
-
-        mycontext.setlistingfilter({ ...mycontext.listingfilter, [key]: value })
+        if (key === 'subcategory') {
+            dispatch(setSubcategory(value));
+        }
+        else if (key === 'brand') {
+            dispatch(setBrand(value));
+        }
     }
 
     const filterbyprice = (val) => {
-        mycontext.setlistingfilter({ ...mycontext.listingfilter, 'min': val[0], 'max': val[1] })
+        dispatch(setPrice(val));
     }
+
     useEffect(() => {
-        GetSubCategoryList();
+
+        GetSubCategoryList(filter?.category);
         GetProductsBrands();
-    }, [mycontext.listingfilter])
+
+    }, [filter])
 
 
     return (
@@ -65,8 +71,12 @@ const Sidebar = () => {
                 <FormLabel id="demo-radio-buttons-group-label" style={{ fontWeight: 600, color: 'black' }}>PRODUCT SUBCATEGORIES</FormLabel>
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
                     name="radio-buttons-group"
+                    // value={radionFilter.selectedSubcategory}
+                    value={filter.subcategory}
+                    onChange={(e) => {
+                        selectedVal('subcategory', e.target.value);
+                    }}
                 >
                     <ul className='overflow-x-hidden max-h-[250px]'>
 
@@ -74,13 +84,11 @@ const Sidebar = () => {
                             subcategorylist && subcategorylist?.map((scat, index) => {
                                 return (
                                     <li key={index} className="listitem flex justify-start items-center">
-                                        <FormControlLabel onChange={() => { selectedVal('subcategory', scat?.subcategory) }} value={scat?.subcategory} control={<Radio />} label={scat?.subcategory} />
+                                        <FormControlLabel value={scat?.subcategory} control={<Radio />} label={scat?.subcategory} />
                                     </li>
                                 )
                             })
                         }
-
-
                     </ul>
 
                 </RadioGroup>
@@ -89,13 +97,12 @@ const Sidebar = () => {
             <div>
                 <h3 className='font-semibold mb-4'>FILTER BY PRICE</h3>
                 {/* <RangeSlider value={val} onInput={setval} min={10} max={100000} /> */}
-                <RangeSlider value={val} onInput={(v) => {
-                    setval(v);
+                <RangeSlider value={filter.price} onInput={(v) => {
                     filterbyprice(v)
                 }} min={10} max={100000} />
                 <div className='flex justify-between mt-2'>
-                    <span>From Rs : <strong className='text-green-800'>{val[0]}</strong></span>
-                    <span>To Rs : <strong className='text-green-800'>{val[1]}</strong></span>
+                    <span>From Rs : <strong className='text-green-800'>{filter.price[0]}</strong></span>
+                    <span>To Rs : <strong className='text-green-800'>{filter.price[1]}</strong></span>
                 </div>
             </div>
 
@@ -122,16 +129,19 @@ const Sidebar = () => {
                 <FormLabel id="demo-radio-buttons-group-label" style={{ fontWeight: 600, color: 'black' }}>Product Brands</FormLabel>
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
                     name="radio-buttons-group"
+                    value={filter.brand}
+                    onChange={(e) => {
+                        selectedVal('brand', e.target.value);
+                    }}
                 >
                     <ul className='overflow-x-hidden max-h-[250px]'>
 
                         {
-                            brands && brands?.map((b, index) => {
+                            brands?.map((b, index) => {
                                 return (
                                     <li key={index} className="listitem flex justify-start items-center">
-                                        <FormControlLabel onChange={() => selectedVal('brand', b)} value={b} control={<Radio />} label={b} />
+                                        <FormControlLabel value={b} control={<Radio />} label={b} />
                                     </li>
                                 )
                             })

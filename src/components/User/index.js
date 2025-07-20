@@ -1,22 +1,24 @@
 
 import Button from '@mui/material/Button';
 import * as React from 'react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect } from 'react';
 import { IoCartOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { create, get } from '../../RestApi';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FaUserPlus } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
-import { Mycontext } from '../../App';
-
+import { showAlert } from '../../features/alert/alertSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser, logout } from '../../features/user/userAPI';
 
 const User = () => {
 
-    const context = useContext(Mycontext);
+    const dispatch = useDispatch();
     const navigate = useNavigate()
+    const user = useSelector((state) => state.user);
+
     //menu start
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -26,62 +28,34 @@ const User = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
     //menu end
-
-    const [isLogin, setIsLogin] = useState(false);
-    const [user, setUser] = useState(null);
 
     const Logout = async () => {
         try {
+            await dispatch(logout()).unwrap();
+            dispatch(showAlert({
+                color: 'success',
+                msg: 'Logout successfull...'
+            }))
 
-            const response = await create('http://localhost:5000/auth/logout', {});
-
-            if (response?.data?.success) {
-                setUser(null);
-                setIsLogin(false);
-                context.setTotalCart(0)
-                context.setalertBox({
-                    open: true,
-                    color: 'success',
-                    msg: response?.data?.msg
-                })
-                navigate('/')
-            }
+            navigate('/');
         } catch (error) {
-            console.log('Error in logout', error);
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
-                msg: error?.response?.data?.msg
-            })
+                msg: error?.message || "Error in logout"
+            }))
         }
     }
 
-    const getProfile = async () => {
-        try {
-
-            const response = await get('http://localhost:5000/users/profile');
-
-
-            if (response?.data?.isLogin) {
-                setIsLogin(true);
-                setUser(response?.data?.user);
-                context.setTotalCart(response?.data?.user?.cart?.length)
-            }
-        } catch (error) {
-            console.log('Error in getting profile of user', error)
-        }
-    }
     useEffect(() => {
-        getProfile();
+        dispatch(fetchUser());
     }, [])
     return (
         <>
             <div className='flex  justify-end items-center gap-2 w-full h-full '>
 
                 {
-                    isLogin === true ?
+                    user.isLogin === true ?
 
                         <div>
                             <Button
@@ -92,9 +66,9 @@ const User = () => {
                                 onClick={handleClick}
                                 style={{ color: 'black' }}
                             >
-                                <div className='flex justify-center items-center h-10 w-10 rounded-full border-2 border-blue-700  capitalize '>{user?.name?.substr(0, 2)}</div>
+                                <div className='flex justify-center items-center h-10 w-10 rounded-full border-2 border-blue-700  capitalize '>{user?.item?.name?.substr(0, 2)}</div>
                                 <div className='flex flex-col items-start ml-2 leading-tight'>
-                                    <span className='font-bold normal-case hidden sm:block'>{user?.name}</span>
+                                    <span className='font-bold normal-case hidden sm:block'>{user?.item?.name}</span>
                                     {/* <span className='normal-case'>{user?.email}</span> */}
                                 </div>
                             </Button>
@@ -109,9 +83,9 @@ const User = () => {
                                     },
                                 }}
                             >
-                                <MenuItem sx={{gap : 1.5}} onClick={handleClose}><FaUserPlus className='text-base opacity-70' />My Account</MenuItem>
-                                <MenuItem sx={{gap : 1.5}} onClick={handleClose}><RiLockPasswordFill className='text-base opacity-70' /> Reset Password</MenuItem>
-                                <MenuItem sx={{gap : 1.5}} onClick={() => {
+                                <MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><FaUserPlus className='text-base opacity-70' />My Account</MenuItem>
+                                <MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><RiLockPasswordFill className='text-base opacity-70' /> Reset Password</MenuItem>
+                                <MenuItem sx={{ gap: 1.5 }} onClick={() => {
 
                                     handleClose()
                                     Logout();
@@ -150,7 +124,7 @@ const User = () => {
                     >
                         <IoCartOutline className='font-bold text-[28px] sm:text-[35px] text-gray-700' />
                     </Button>
-                    <span className='flex justify-center items-center h-5 w-5 absolute -top-1 -right-1 rounded-full text-white bg-red-600'>{context?.totalCart}</span>
+                    <span className='flex justify-center items-center h-5 w-5 absolute -top-1 -right-1 rounded-full text-white bg-red-600'>{user?.isLogin === true ? user?.item?.cart?.length : '0'}</span>
                 </div>
                 </Link>
             </div>

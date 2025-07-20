@@ -2,6 +2,8 @@
 import "./index.css"; // Import your CSS file for styling
 
 const Footerlist = () => {
+
+  console.log('FooterList');
   return (
     <footer className="footer1">
       <div className="footer-container">

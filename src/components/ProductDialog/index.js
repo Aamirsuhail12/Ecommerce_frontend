@@ -4,23 +4,26 @@ import { Button } from '@mui/material';
 import { IoIosHeart } from "react-icons/io";
 import { MdCompareArrows } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
-import { useContext, useEffect, useState } from 'react';
-import { Mycontext } from '../../App';
-import { update } from '../../RestApi';
+import { useEffect, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { FaMinus } from 'react-icons/fa6';
 import { FaPlus } from 'react-icons/fa6';
 import _Swiper from '../Swiper';
+import { showAlert } from '../../features/alert/alertSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCart } from '../../features/user/userAPI';
 
 const ProductDialog = ({ isopen, handleOpen, product }) => {
 
-    const context = useContext(Mycontext);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user); 
+    
     const [count, setCount] = useState(1);
     const [ramSelected, setRamSelected] = useState(null);
     const [weightSelected, setWeightSelected] = useState(null);
     const [sizeSelected, setSizeSelected] = useState(null);
-    const [isloading, setIsloading] = useState(false);
+    
     const [cart, setCart] = useState({
         product: '',
         quantity: 1,
@@ -28,7 +31,6 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
         weight: '',
         RAM: ''
     })
-
 
     const handleCountChange = async (count) => {
         setCount(count)
@@ -60,55 +62,47 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
     const AddToCart = async () => {
 
         if (!cart?.product) {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product id is required'
-            })
+            }))
             return;
         }
         if (!cart?.quantity) {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Quantity is required'
-            })
+            }))
             return;
         }
         if (product?.RAM?.length > 0 && cart?.RAM === '') {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product RAM is required'
-            })
+            }))
             return;
         }
         if (product?.weight?.length > 0 && cart?.weight === '') {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product Weight is required'
-            })
+            }))
             return;
         }
         if (product?.size?.length > 0 && cart?.size === '') {
-            context.setalertBox({
-                open: true,
+            dispatch(showAlert({
                 color: 'error',
                 msg: 'Product size is required'
-            })
+            }))
             return;
         }
         try {
-            setIsloading(true)
-            const response = await update('http://localhost:5000/users/cart/add', cart);
-            context.setalertBox({
-                open: true,
+            await dispatch(addCart(cart)).unwrap();
+            dispatch(showAlert({
                 color: 'success',
-                msg: response?.data?.msg
-            })
-            context.setTotalCart(response?.data?.cart?.length)
-            setIsloading(false)
+                msg: 'Product added to cart successfully!'
+            }))
+
             setCart({
                 product: product._id,
                 quantity: 1,
@@ -121,13 +115,11 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
             setRamSelected(null);
             setCount(1)
         } catch (error) {
-            console.log('Error in adding product to cart', error?.response?.data?.msg);
-            context.setalertBox({
-                open: true,
+            console.log('Error in adding product to cart', error);
+            dispatch(showAlert({
                 color: 'error',
-                msg: error?.response?.data?.msg
-            })
-            setIsloading(false)
+                msg: error
+            }))
         }
     }
 
@@ -238,7 +230,7 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
                             product?.RAM?.map((ram, index) => {
 
                                 return (
-                                    <div onClick={() => AddRAM(index, ram)} key={index} className={`${index === ramSelected ? 'active' : ''} ${index !== ramSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{ram}</div>
+                                    <div  onClick={() => AddRAM(index, ram)} key={index} className={`${index === ramSelected ? 'active' : ''} ${index !== ramSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{ram}</div>
                                 )
                             })}
                         </div>
@@ -279,20 +271,20 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
                                     <FaPlus /></button>
                             </div>
                             {
-                                isloading === true ?
+                                user.status === 'loading' ?
                                     <Button sx={{
                                         backgroundColor: 'blue',
                                         color: 'white',
                                         fontWeight: 'bold',
                                         borderRadius: '50px',
                                         px: {
-                                            sm : '10px',
-                                            md : '20px',
-                                            lg : '40px'
+                                            sm: '10px',
+                                            md: '20px',
+                                            lg: '40px'
                                         },
                                         py: {
-                                            sm : '5px',
-                                            md : '10px'
+                                            sm: '5px',
+                                            md: '10px'
                                         }
                                     }}>
                                         Add to cart <Box sx={{ display: 'flex' }}>

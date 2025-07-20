@@ -67,7 +67,7 @@ const RelatedProducts = ({ product }) => {
                setProducts(response?.data?.products)
                setTimeout(() => {
                     sliderRef?.current?.slickGoTo(0);
-               }, 1000)
+               }, 300)
 
           } catch (error) {
                console.log('Error in getting products', error);
@@ -116,5 +116,3 @@ const RelatedProducts = ({ product }) => {
 }
 
 export default RelatedProducts;
-
-
