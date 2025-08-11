@@ -1,7 +1,7 @@
 
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import banner_img from '../../assets/banner1.jpg';
 import { Link } from '@mui/material';
 import Radio from '@mui/material/Radio';

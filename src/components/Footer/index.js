@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="footer-section">
           <h4>About Us</h4>
           <p>
-            We are dedicated to providing you with the best online shopping experience. 
+            We are dedicated to providing you with the best online shopping experience.
             Shop the latest trends at unbeatable prices!
           </p>
         </div>
@@ -20,10 +20,11 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="/shop">Shop</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/contact">Contact Us</a></li>
-            <li><a href="/faq">FAQs</a></li>
+            {/* <li><a href="/shop">Shop</a></li> */}
+            <li><a >Shop</a></li>
+            <li><a >About Us</a></li>
+            <li><a >Contact Us</a></li>
+            <li><a >FAQs</a></li>
           </ul>
         </div>
 

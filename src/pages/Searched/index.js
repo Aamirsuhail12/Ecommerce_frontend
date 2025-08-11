@@ -1,5 +1,5 @@
-import Sidebar from "../Sidebar";
-import Card from '../Card'
+import Sidebar from "../../components/Sidebar";
+import Card from "../../components/Card";
 import { FaBars } from "react-icons/fa";
 import { BsFillGridFill } from "react-icons/bs";
 import { BsGrid3X3Gap } from "react-icons/bs";
@@ -9,41 +9,44 @@ import Button from '@mui/material/Button';
 import { useEffect, useRef, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../features/product/productAPI";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { BiErrorCircle } from "react-icons/bi";
+import { SearchProduct } from "../../features/product/productAPI";
+import { useSearchParams } from "react-router";
 
-const Listing = () => {
+const Searching = () => {
 
-    console.log('Listing');
-    const dispatch = useDispatch();
+
     const targetElement = useRef(null);//scroll to this element.
     const [productview, setProductview] = useState('two');
-    const products = useSelector((state) => state.products.items);
+    const products = useSelector((state) => state.products?.items);
     const status = useSelector((state) => state?.products?.status);
-    const filter = useSelector((state) => state?.filter);
+    const dispatch = useDispatch();
 
+    const [searchParams] = useSearchParams()
+    const q = searchParams.get('q');
     useEffect(() => {
         targetElement?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, [products])
 
     useEffect(() => {
-        dispatch(fetchProducts(filter));
-    }, [filter])
+        console.log('q',q)
+        if(q)
+         dispatch(SearchProduct(q));
+    }, [q])
+
 
     return (
         <div className="flex relative space">
-            <div className="hidden  md:block lg:w-3/12  sticky top-0">
-                <Sidebar></Sidebar>
-            </div>
+
             {
                 status === 'loading' ?
-                    <Box sx={{ display: 'flex', justifyContent : 'center', alignItems : 'start',width : '100%'}}>
-                        <CircularProgress size={30} style={{color : 'black'}}/>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', width: '100%' }}>
+                        <CircularProgress size={30} style={{ color: 'black' }} />
                     </Box>
                     :
-                    <div className="w-full md:w-9/12 flex justify-start items-start flex-wrap h-[100%] md:ml-10">
+                    <div className="w-full  flex justify-start items-start flex-wrap h-[100%] md:ml-10">
                         <div className="w-full h-[150px] md:h-[300px]">
                             <img className="w-full h-full" src='https://t4.ftcdn.net/jpg/02/49/50/15/240_F_249501541_XmWdfAfUbWAvGxBwAM0ba2aYT36ntlpH.jpg' alt="Image Not Found" />
                         </div>
@@ -78,10 +81,10 @@ const Listing = () => {
                         </div>
                         <div ref={targetElement} className="flex flex-wrap justify-start gap-3 items-center">
                             {
-                                products?.length === 0 && <div className="flex justify-center items-center flex-wrap m-auto text-red-500 font-bold text-[30px] md:text-[40px]">No product Found!<BiErrorCircle style={{marginLeft : '15px'}}/></div>
+                                products?.length === 0 && <div className="flex justify-center items-center flex-wrap m-auto text-red-500 font-bold text-[30px] md:text-[40px]">No product Found!<BiErrorCircle style={{ marginLeft: '15px' }} /></div>
                             }
                             {
-                                
+
                                 products?.map((p, index) => {
                                     return <Card key={index} productview={productview} product={p} />
                                 })
@@ -96,4 +99,4 @@ const Listing = () => {
     )
 }
 
-export default Listing;
+export default Searching;

@@ -27,9 +27,15 @@ const filterSlice = createSlice({
         },
         resetFilter: (state) => {
             Object.assign(state, initialState)
+        },
+        emptyFilter : (state)=>{
+            state.category = '';
+            state.subcategory = '';
+            state.brand = '';
+            state.price = [10,50000];
         }
     }
 })
 
-export const { setBrand, setCategory, setPrice, setSubcategory, resetFilter } = filterSlice.actions;
+export const { setBrand, setCategory, setPrice, setSubcategory, resetFilter ,emptyFilter} = filterSlice.actions;
 export default filterSlice.reducer;

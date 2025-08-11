@@ -13,17 +13,31 @@ import _Swiper from '../Swiper';
 import { showAlert } from '../../features/alert/alertSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCart } from '../../features/user/userAPI';
+import { addWishList } from '../../features/user/userAPI';
+
+import { MdBrandingWatermark } from "react-icons/md";
+import { BiCategory } from "react-icons/bi";
+import { TbCategoryPlus } from "react-icons/tb";
+import { MdDescription } from "react-icons/md";
+import { FcRating } from "react-icons/fc";
+import { MdPriceCheck } from "react-icons/md";
+import { RiDiscountPercentFill } from "react-icons/ri";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+import { BiSolidMemoryCard } from "react-icons/bi";
+import { GiWeight } from "react-icons/gi";
+import { RxFontSize } from "react-icons/rx";
+import { FaProductHunt } from "react-icons/fa6";
 
 const ProductDialog = ({ isopen, handleOpen, product }) => {
 
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.user); 
-    
+    const user = useSelector((state) => state.user);
+
     const [count, setCount] = useState(1);
     const [ramSelected, setRamSelected] = useState(null);
     const [weightSelected, setWeightSelected] = useState(null);
     const [sizeSelected, setSizeSelected] = useState(null);
-    
+
     const [cart, setCart] = useState({
         product: '',
         quantity: 1,
@@ -31,6 +45,23 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
         weight: '',
         RAM: ''
     })
+
+    const handleAddWishList = async () => {
+        try {
+            await dispatch(addWishList(product._id)).unwrap();
+            dispatch(showAlert({
+                color: 'success',
+                msg: 'Product added to wishlist successfully!'
+            }))
+
+        } catch (error) {
+            dispatch(showAlert({
+                color: 'error',
+                msg: error === 'Request failed with status code 409' ? 'product already added to list' : error === 'Request failed with status code 401' ? 'Please login to continue' : error
+
+            }))
+        }
+    }
 
     const handleCountChange = async (count) => {
         setCount(count)
@@ -118,7 +149,7 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
             console.log('Error in adding product to cart', error);
             dispatch(showAlert({
                 color: 'error',
-                msg: error
+                msg: error === 'No token. unauthorized' ? 'Please login to continue' : error
             }))
         }
     }
@@ -198,6 +229,246 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
                     </div>
                     <div className='w-full  md:w-7/12 flex flex-col items-start gap-5 '>
 
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><FaProductHunt style={{ fontSize: '25px' }} /></span>
+                                <span>Name</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div className='font-bold'>{product?.name}</div>
+                            </div>
+                        </div>
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><MdBrandingWatermark style={{ fontSize: '25px' }} /></span>
+                                <span>Brand</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div>{product?.brand}</div>
+                            </div>
+                        </div>
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><BiCategory style={{ fontSize: '25px' }} /></span>
+                                <span>Category</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div>{product?.category?.name}</div>
+                            </div>
+                        </div>
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><TbCategoryPlus style={{ fontSize: '25px' }} /></span>
+                                <span>Sub category</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div>{product?.subcategory?.subcategory}</div>
+                            </div>
+                        </div>
+
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><MdDescription style={{ fontSize: '25px' }} /></span>
+                                <span>Description</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div>{product?.description}</div>
+                            </div>
+                        </div>
+
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><FcRating style={{ fontSize: '25px' }} /></span>
+                                <span>rating</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div>{product?.rating}</div>
+                            </div>
+                        </div>
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><MdPriceCheck style={{ fontSize: '25px' }} /></span>
+                                <span>price</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div className='flex items-center text-red-700'><FaIndianRupeeSign /><span ><del>{product?.oldPrice}</del></span></div>
+                                <div className='flex items-center font-bold'><FaIndianRupeeSign /><span>{product?.price}</span></div>
+
+                            </div>
+                        </div>
+
+                        <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                            <div className='flex items-center gap-3'>
+                                <span><RiDiscountPercentFill style={{ fontSize: '25px' }} /></span>
+                                <span>discount</span>
+                            </div>
+                            <div className='flex items-center gap-5'>
+                                <div>:</div>
+                                <div className='bg-[#90EE90] px-4 py-[3px] rounded-[20px]'>{product?.discount}% off</div>
+                            </div>
+                        </div>
+
+                        {
+                            product?.RAM?.length > 0 &&
+                            <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                                <div className='flex items-center gap-3'>
+                                    <span><BiSolidMemoryCard style={{ fontSize: '25px' }} /></span>
+                                    <span>RAM</span>
+                                </div>
+                                <div className='flex items-center gap-5'>
+                                    <div>:</div>
+                                    <div className='flex gap-3 flex-wrap lg:flex-nowrap items-center'>{
+                                        product?.RAM?.map((ram, index) => {
+
+                                            return (
+                                                <div onClick={() => AddRAM(index, ram)} key={index} className={`${index === ramSelected ? 'active' : ''} ${index !== ramSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{ram}</div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        {
+                            product?.weight?.length > 0 &&
+                            <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                                <div className='flex items-center gap-3'>
+                                    <span><GiWeight style={{ fontSize: '25px' }} /></span>
+                                    <span>weight</span>
+                                </div>
+                                <div className='flex items-center gap-5'>
+                                    <div>:</div>
+                                    <div className='flex gap-3 flex-wrap lg:flex-nowrap items-center'>{
+                                        product?.weight?.map((w, index) => {
+
+                                            return (
+                                                <div onClick={() => AddWeight(index, w)} key={index} className={`${index === weightSelected ? 'active' : ''} ${index !== weightSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800  px-2 py-[2px] font-semibold rounded-full`}>{w}</div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        {
+                            product?.size?.length > 0 &&
+
+                            <div className='flex items-center gap-3 md:gap-10 lg:gap-15'>
+                                <div className='flex items-center gap-3'>
+                                    <span><RxFontSize style={{ fontSize: '25px' }} /></span>
+                                    <span>size</span>
+                                </div>
+                                <div className='flex items-center gap-5'>
+                                    <div>:</div>
+
+
+                                    <div className='flex gap-3 flex-wrap lg:flex-nowrap items-center'>{
+                                        product?.size?.map((s, index) => {
+
+                                            return (
+                                                <div onClick={() => AddSize(index, s)} key={index} className={`${index === sizeSelected ? 'active' : ''} ${index !== sizeSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{s}</div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+
+                        <div className='flex gap-10 flex-wrap lg:flex-nowrap items-center'>
+                            <div className='flex justify-center items-center gap-5'>
+                                <button className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'
+                                    onClick={() => {
+                                        if (count > 1)
+                                            handleCountChange(count - 1);
+                                    }}
+                                ><FaMinus /></button>
+                                <span>{count}</span>
+                                <button
+                                    onClick={() => {
+                                        handleCountChange(count + 1);
+                                    }}
+                                    className='w-12 h-12 flex justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300'>
+                                    <FaPlus /></button>
+                            </div>
+                            {
+                                user.status === 'loading' ?
+                                    <Button sx={{
+                                        backgroundColor: 'blue',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        borderRadius: '50px',
+                                        px: {
+                                            sm: '10px',
+                                            md: '20px',
+                                            lg: '40px'
+                                        },
+                                        py: {
+                                            sm: '5px',
+                                            md: '10px'
+                                        }
+                                    }}>
+                                        Add to cart <Box sx={{ display: 'flex' }}>
+                                            <CircularProgress size={25} style={{ color: 'white' }} className='ml-4 text-white' />
+                                        </Box></Button>
+                                    :
+                                    <Button onClick={(e) => {
+                                        e.stopPropagation();
+                                        AddToCart()
+                                    }}
+                                        sx={{
+                                            backgroundColor: 'blue',
+                                            color: 'white',
+                                            fontWeight: 'bold',
+                                            borderRadius: '50px',
+                                            px: '40px',
+                                            py: '10px'
+                                        }}
+
+                                    >Add to cart</Button>
+                            }
+
+                        </div>
+                        <div className='flex gap-5 flex-wrap lg:flex-nowrap items-center'>
+                            <Button
+                                onClick={handleAddWishList}
+                                sx={{
+                                    border: '1px solid black',
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    borderRadius: '50px',
+                                    px: '10px'
+                                }}>
+                                <IoIosHeart className='h-[15px] md:h-[30px] w-[15px] md:w-[30px] mr-[10px]'
+                                />Add to Wishlist</Button>
+                            <Button sx={{
+                                border: '1px solid black',
+                                color: 'black',
+                                fontWeight: 'bold',
+                                borderRadius: '50px',
+                                px: '10px'
+                            }}>
+                                <MdCompareArrows className='h-[30px] w-[30px] mr-[10px]' />COMPARE
+                            </Button>
+                            <hr></hr>
+                        </div>
+                    </div>
+                    {/* <div className='w-full  md:w-7/12 flex flex-col items-start gap-5 '>
+
                         <div className='flex gap-5 items-center'>
                             <span><del>Rs{product?.oldPrice}</del></span>
                             <span className='ml-4 text-red-800 font-bold'>Rs{product?.price}</span>
@@ -230,7 +501,7 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
                             product?.RAM?.map((ram, index) => {
 
                                 return (
-                                    <div  onClick={() => AddRAM(index, ram)} key={index} className={`${index === ramSelected ? 'active' : ''} ${index !== ramSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{ram}</div>
+                                    <div onClick={() => AddRAM(index, ram)} key={index} className={`${index === ramSelected ? 'active' : ''} ${index !== ramSelected ? 'hover:bg-gray-200' : ''} hover:cursor-pointer  border-[1px] border-blue-800 px-2 py-[2px] font-semibold rounded-full`}>{ram}</div>
                                 )
                             })}
                         </div>
@@ -288,7 +559,7 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
                                         }
                                     }}>
                                         Add to cart <Box sx={{ display: 'flex' }}>
-                                            <CircularProgress size={25} className='ml-4 text-white' />
+                                            <CircularProgress size={25} style={{ color: 'white' }} className='ml-4 text-white' />
                                         </Box></Button>
                                     :
                                     <Button onClick={(e) => {
@@ -309,13 +580,15 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
 
                         </div>
                         <div className='flex gap-5 flex-wrap lg:flex-nowrap items-center'>
-                            <Button sx={{
-                                border: '1px solid black',
-                                color: 'black',
-                                fontWeight: 'bold',
-                                borderRadius: '50px',
-                                px: '10px'
-                            }}>
+                            <Button
+                                onClick={handleAddWishList}
+                                sx={{
+                                    border: '1px solid black',
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    borderRadius: '50px',
+                                    px: '10px'
+                                }}>
                                 <IoIosHeart className='h-[15px] md:h-[30px] w-[15px] md:w-[30px] mr-[10px]'
                                 />Add to Wishlist</Button>
                             <Button sx={{
@@ -329,7 +602,7 @@ const ProductDialog = ({ isopen, handleOpen, product }) => {
                             </Button>
                             <hr></hr>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </Dialog>

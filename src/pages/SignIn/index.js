@@ -12,12 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setHeaderFooterVisibility } from "../../features/ui/uiSlice";
 import { showAlert } from "../../features/alert/alertSlice";
 import { signIn } from "../../features/user/userAPI";
+import { signInWithGoogle } from "..//../firebaseConfig";
+import axios from "axios";
 const SignIn = () => {
+
+
 
     console.log('SignIn');
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const user = useSelector((state)=>state.user);
+    const user = useSelector((state) => state.user);
 
     const [payload, setPayload] = useState({
         email: '',
@@ -42,7 +46,7 @@ const SignIn = () => {
 
         try {
             await dispatch(signIn(payload)).unwrap();
-            
+
             dispatch(showAlert({
                 color: 'success',
                 msg: 'User Login successfull...'
@@ -67,6 +71,48 @@ const SignIn = () => {
 
     }
 
+
+    //firebase 
+
+    const handleLogin = async () => {
+        try {
+            const firebaseUser = await signInWithGoogle();
+            if (firebaseUser) {
+                const token = await firebaseUser.getIdToken();
+                const res = await axios.post("http://localhost:5000/auth/signinwithgoogle", { token },{
+                    withCredentials : true
+                });
+
+                if (res.data.success) {
+                    dispatch(showAlert({
+                        color: 'success',
+                        msg: 'Google Sign-In successful...'
+                    }));
+                    
+                    navigate('/')
+                } else {
+                    dispatch(showAlert({
+                        color: 'error',
+                        msg: 'Login failed, please try again.'
+                    }));
+                }
+            } else {
+                dispatch(showAlert({
+                    color: 'error',
+                    msg: 'Google Sign-In failed, no user returned.'
+                }));
+            }
+        } catch (error) {
+            dispatch(showAlert({
+                color: 'error',
+                msg: error?.message || 'Something went wrong during login.'
+            }));
+            console.error('Login error:', error);
+        }
+    };
+
+    //firebase end
+
     useEffect(() => {
         dispatch(setHeaderFooterVisibility(false));
     }, [])
@@ -86,7 +132,7 @@ const SignIn = () => {
                         <TextField onChange={handleChange} required type="password" name="password" value={payload?.password} autoComplete="new-password" label="Password" variant="standard" style={{ width: '100%' }} />
                     </div>
                     <Box className="w-full md:w-1/2 justify-start">
-                        <Button >Forgot Password?</Button>
+                       <Link to='/forget-password'> <Button sx={{fontWeight : 'bold'}}>Forgot Password?</Button></Link>
                     </Box>
 
                     <div className="flex w-full gap-5 justify-between">
@@ -105,7 +151,7 @@ const SignIn = () => {
                         Not Registered? <Link to='/signup'><Button style={{ fontWeight: 'bold' }}>Sign Up</Button></Link>
                     </div>
                     <p className="font-semibold m-auto">Or continue with social account</p>
-                    <Button sx={{ border: '1px solid', fontWeight: 'bold' }}><FcGoogle className="mr-[5px] text-[30px]" /> Sign in with Google</Button>
+                    <Button onClick={handleLogin} sx={{ border: '1px solid', fontWeight: 'bold' }}><FcGoogle className="mr-[5px] text-[30px]" /> continue with Google</Button>
                 </form>
             </div>
         </div>

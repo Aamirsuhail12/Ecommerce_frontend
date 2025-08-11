@@ -1,6 +1,8 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser, logout, signUp, signIn, updateCart, deleteCart, addCart } from "./userAPI";
+import { fetchUser, logout, signUp, signIn, updateCart, deleteCart, addCart, addWishList, getWishList, deleteWishList, editProfile, changePassword } from "./userAPI";
+import { LiaOilCanSolid } from "react-icons/lia";
+import { act } from "react";
 
 const initialState = {
     item: {},
@@ -106,7 +108,65 @@ const userSlice = createSlice({
                 state.status = 'succeeded';
                 state?.item?.cart?.push(action.payload);
             })
-           
+            .addCase(addWishList.pending, (state) => {
+                // state.status = 'loading'
+            })
+            .addCase(addWishList.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload || action.error?.message;
+            })
+            .addCase(addWishList.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state?.item?.wishList?.push(action.payload);
+            })
+            .addCase(getWishList.pending, (state) => {
+                state.status = 'loading'
+            })
+            .addCase(getWishList.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload || action.error?.message;
+            })
+            .addCase(getWishList.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.item.wishList = action?.payload;
+                console.log('aa', state.item.wishList)
+            })
+            .addCase(deleteWishList.pending, (state) => {
+                state.status = 'loading'
+            })
+            .addCase(deleteWishList.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload || action.error?.message;
+            })
+            .addCase(deleteWishList.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.item.wishList = state?.item?.wishList?.filter((pro) => pro._id.toString() !== action.payload);
+            })
+            .addCase(editProfile.pending, (state) => {
+                state.status = 'loading'
+            })
+            .addCase(editProfile.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload || action.error?.message
+            })
+            .addCase(editProfile.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.item.name = action?.payload?.name;
+                state.item.phone = action?.payload?.phone;
+                if (action?.payload?.image) {
+                    state.item.image = action?.payload?.image;
+                }
+            })
+            .addCase(changePassword.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload || action.error?.message;
+            })
+            .addCase(changePassword.fulfilled, (state) => {
+                state.status = 'succeeded'
+            })
     }
 })
 

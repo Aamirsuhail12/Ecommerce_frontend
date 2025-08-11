@@ -1,12 +1,12 @@
 
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchProducts, fetchProduct } from './productAPI';
+import { fetchProducts, fetchProduct, SearchProduct } from './productAPI';
 
 const initialState = {
     items: [],         // list of all products
     singleItem: null,  // specific product (for detail page)
     status: 'idle',// 'Loading', 'succeeded', 'failed'
-    error: null
+    error: null,
 }
 
 const productSlice = createSlice({
@@ -36,6 +36,18 @@ const productSlice = createSlice({
             .addCase(fetchProduct.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.singleItem = action.payload;
+            })
+            .addCase(SearchProduct.pending,(state)=>{
+                state.status = 'loading';
+            })
+            .addCase(SearchProduct.rejected,(state,action)=>{
+                state.status = 'failed';
+                state.error = action?.payload || action?.error?.message;
+            })
+            .addCase(SearchProduct.fulfilled,(state,action)=>{
+                state.status = 'succeeded';
+                console.log('pp',action.payload)
+                state.items = action?.payload;
             })
     }
 })

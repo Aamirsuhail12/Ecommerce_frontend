@@ -6,17 +6,37 @@ import { useState } from 'react';
 import ProductDialog from '../ProductDialog';
 import { Rating } from '@mui/material';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { addWishList } from '../../features/user/userAPI';
+import { showAlert } from '../../features/alert/alertSlice';
+import { FaRupeeSign } from "react-icons/fa";
 
 
 const Card = ({ productview, product }) => {
 
+    const dispatch = useDispatch();
     const [isopen, setisopen] = useState(false);
-
     const navigate = useNavigate();
 
     function handleOpen() {
         console.log("Button clicked! Handling open action...");
         setisopen(false);
+    }
+
+    const handleAddWishList = async () => {
+        try {
+            await dispatch(addWishList(product._id)).unwrap();
+            dispatch(showAlert({
+                color: 'success',
+                msg: 'Product added to wishlist successfully!'
+            }))
+
+        } catch (error) {
+            dispatch(showAlert({
+                color: 'error',
+                msg: error === 'Request failed with status code 409' ? 'product already added to list' : error === 'Request failed with status code 401' ? 'Please login to continue' : error
+            }))
+        }
     }
     const ProductDetails = (id) => {
         navigate(`/product/${id}`)
@@ -38,7 +58,7 @@ const Card = ({ productview, product }) => {
                 ProductDetails(product._id)
             }} className='flex flex-col items-start gap-2'>
                 <div className='flex justify-between items-center w-full'>
-                    <p className='font-small md:font-medium'>{product?.name?.length < 10 ? product?.name : product?.name?.substr(0, 10) + '...'} </p>
+                    <p className='font-small md:font-medium '>{product?.name?.length < 10 ? product?.name : product?.name?.substr(0, 10) + '...'} </p>
                     <span className='font-bold hidden lg:block text-green-800'>IN STOCK</span>
                 </div>
                 <div className='flex justify-start items-center'>
@@ -50,8 +70,8 @@ const Card = ({ productview, product }) => {
                 </div>
                 <div className='discount flex gap-2 items-center'>
                     <div className='flex justity-start gap-2 items-center'>
-                    <span className='text-black font-small md:font-medium md:font-bold'>Rs{product?.price}</span>
-                    <span className='opacity-50 text-[6px] md:text-[12px]'><del>Rs{product?.oldPrice}</del></span>
+                        <span className='text-black font-small md:font-medium md:font-bold flex items-center'><FaRupeeSign/><span>{product?.price}</span></span>
+                        <span className='opacity-50 text-[6px] md:text-[12px] flex items-center'><FaRupeeSign/><span><del>{product?.oldPrice}</del></span></span>
                     </div>
                     <span className='bg-green-200 text-green-500 py-[1px] hidden lg:block px-[10px] rounded-full'>{product?.discount}% off</span>
                 </div>
@@ -145,7 +165,7 @@ const Card = ({ productview, product }) => {
                         zIndex: '10',
                         borderRadius: '50%'
                     }}>
-                    <FaRegHeart className='text-15px sm:text-[20px] md:text-[20px] lg:text-[25px] xl:text-[25px] font-bold' />
+                    <FaRegHeart onClick={handleAddWishList} className='text-15px sm:text-[20px] md:text-[20px] lg:text-[25px] xl:text-[25px] font-bold' />
                 </Button>
             </div>
 

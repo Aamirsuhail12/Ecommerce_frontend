@@ -209,9 +209,31 @@ body {
   min-height: 100px;
   width: 50%;
   height: 100px;
+}
 
-  min-width: 270px;
-  max-width: 320px;
+@media (min-width : 768px) {
+  .one {
+
+    width: 100%;
+    height: auto;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .one .img-container {
+    border: 1px solid black;
+    margin: auto;
+    min-width: 50%;
+    min-height: 100px;
+    width: 50%;
+    height: 100px;
+
+    min-width: 270px;
+    max-width: 320px;
+  }
 }
 
 .two {
@@ -293,7 +315,7 @@ body {
 }
 
 /* ProductDialog Style */
-.active{
+.active {
   background-color: blue;
   color: white;
 }

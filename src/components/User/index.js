@@ -12,6 +12,7 @@ import { FiLogOut } from "react-icons/fi";
 import { showAlert } from '../../features/alert/alertSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, logout } from '../../features/user/userAPI';
+import { FaHeart } from "react-icons/fa";
 
 const User = () => {
 
@@ -66,9 +67,9 @@ const User = () => {
                                 onClick={handleClick}
                                 style={{ color: 'black' }}
                             >
-                                <div className='flex justify-center items-center h-10 w-10 rounded-full border-2 border-blue-700  capitalize '>{user?.item?.name?.substr(0, 2)}</div>
+                                <div className='flex justify-center items-center h-10 w-10 rounded-full border-2 border-blue-700   capitalize '>{user?.item?.image ? <img className='h-10 w-10 rounded-full border-[1px] border-blue-700' src={user?.item?.image} alt='Image Not Found' /> : user?.item?.name?.substr(0, 2)}</div>
                                 <div className='flex flex-col items-start ml-2 leading-tight'>
-                                    <span className='font-bold normal-case hidden sm:block'>{user?.item?.name}</span>
+                                    <span className='font-bold normal-case hidden sm:block'>{user?.item?.name?.length > 15 ? user?.item?.name?.substr(0,15) + '...': user?.item?.name}</span>
                                     {/* <span className='normal-case'>{user?.email}</span> */}
                                 </div>
                             </Button>
@@ -83,8 +84,9 @@ const User = () => {
                                     },
                                 }}
                             >
-                                <MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><FaUserPlus className='text-base opacity-70' />My Account</MenuItem>
-                                <MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><RiLockPasswordFill className='text-base opacity-70' /> Reset Password</MenuItem>
+                                <Link to='/my-account'><MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><FaUserPlus className='text-base opacity-70' />My Account</MenuItem></Link>
+                                <Link to='/wishlist'> <MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><FaHeart className='text-base opacity-70' />My WishList</MenuItem></Link>
+                                <Link to='/orders'><MenuItem sx={{ gap: 1.5 }} onClick={handleClose}><RiLockPasswordFill className='text-base opacity-70' />My Orders</MenuItem></Link>
                                 <MenuItem sx={{ gap: 1.5 }} onClick={() => {
 
                                     handleClose()

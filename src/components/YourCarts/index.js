@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import { showAlert } from '../../features/alert/alertSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCart, deleteCart } from "../../features/user/userAPI";
-
+import { Link } from "react-router-dom";
 const YourCarts = () => {
 
     console.log('YourCarts');
@@ -96,7 +96,7 @@ const YourCarts = () => {
                                                                         <img src={p?.product?.images?.[0]} className="w-full h-full" alt="Image not found"></img>
                                                                     </div>
                                                                     <div>
-                                                                        <span className='font-semibold hover:text-red-800'>{p?.product?.name?.length > 10 ? p?.product?.name?.substr(0, 10) + '...' : p?.product?.name}</span>
+                                                                        <span className='font-semibold hover:text-red-800 cursor-pointer'>{p?.product?.name?.length > 10 ? p?.product?.name?.substr(0, 10) + '...' : p?.product?.name}</span>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -150,8 +150,8 @@ const YourCarts = () => {
                                         <span className='text-red-600 font-semibold flex items-center'><LiaRupeeSignSolid />{subtotal}</span>
                                     </div>
 
-                                    <Button style={{ width: '100%', backgroundColor: 'red', color: 'white', fontWeight: 'bold' }}><MdShoppingCartCheckout style={{ fontSize: '20px', marginRight: '5px' }} />
-                                        Checkout</Button>
+                                    <Link to='/checkout'><Button style={{ width: '100%', backgroundColor: 'red', color: 'white', fontWeight: 'bold' }}><MdShoppingCartCheckout style={{ fontSize: '20px', marginRight: '5px' }} />
+                                        Checkout</Button></Link>
                                 </div>
                             </div>
                         </div>

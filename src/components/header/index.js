@@ -6,10 +6,16 @@ import Search from '../Search';
 import NavBar from '../NavBar';
 import { FaBars } from "react-icons/fa6";
 import { Button, Box } from '@mui/material';
-
+import SideBarForMobile from '../SideBarForMobile';
+import { useState } from 'react';
 const Header = () => {
 
-    
+    const [open, setOpen] = useState(false);
+    const toggleDrawer = (newOpen) => () => {
+        console.log('toggle');
+        setOpen(newOpen);
+    };
+
     console.log('Header');
     return (
         <div>
@@ -23,6 +29,9 @@ const Header = () => {
                         <img src={eCommerceImage} alt="eCommerceImage" className='hidden md:block h-full w-full' />
                         <Box className='block sm:hidden'>
                             <Button
+                                onClick={() => {
+                                    setOpen(true);
+                                }}
                                 sx={{
                                     display: 'flex',
                                     justifyContent: 'center',
@@ -55,6 +64,7 @@ const Header = () => {
             <div className="space max-w-full ">
                 <NavBar></NavBar>
             </div>
+            <SideBarForMobile open={open} toggleDrawer={toggleDrawer} />
         </div>
     )
 }

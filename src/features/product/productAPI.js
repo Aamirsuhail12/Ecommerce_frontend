@@ -23,3 +23,15 @@ export const fetchProduct = createAsyncThunk('products/fetchProduct', async (id,
         return rejectWithValue(error?.response?.data?.msg || error?.message)
     }
 })
+
+export const SearchProduct = createAsyncThunk('products/SearchProduct',async (q,{rejectWithValue})=>{
+    
+    try {
+        
+        const response = await axios.get(`http://localhost:5000/products/search?q=${q}`);
+        console.log('pro',response?.data?.products);
+        return response?.data?.products;
+    } catch (error) {
+        return rejectWithValue(error?.response?.data?.msg || error?.message);
+    }
+})

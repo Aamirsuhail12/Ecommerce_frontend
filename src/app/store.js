@@ -6,7 +6,8 @@ import productReducer from '../features/product/productSlice';
 import categoryReducer from '../features/category/categorySlice';
 import filterReducer from '../features/filter/filterSlice';
 import userReducer from '../features/user/userSlice';
-
+import reviewReducer from '../features/review/reviewSlice';
+import orderReducer from '../features/order/orderSlice';
 export const store = configureStore({
     reducer: {
         ui: uiReducer,
@@ -14,6 +15,8 @@ export const store = configureStore({
         products: productReducer,
         categories: categoryReducer,
         filter: filterReducer,
-        user: userReducer
+        user: userReducer,
+        review: reviewReducer,
+        orders: orderReducer
     }
 })
