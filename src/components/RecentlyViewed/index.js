@@ -53,7 +53,7 @@ const RecentlyViewed = ({ productId }) => {
 
      const PatchedUser = async () => {
           try {
-               const response = await update('http://localhost:5000/users/create/recently-viewed', { id: productId })
+               const response = await update(`${process.env.REACT_APP_SERVER_URL}/users/create/recently-viewed`, { id: productId })
                
 
           } catch (error) {
@@ -63,7 +63,7 @@ const RecentlyViewed = ({ productId }) => {
 
      const getRecentlyViewedProducts = async () => {
           try {
-               const response = await getAll('http://localhost:5000/users/recently-viewed');
+               const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/users/recently-viewed`);
                setProducts(response?.data?.recentlyviewedProducts?.filter(p => p._id !== productId))
                setTimeout(() => {
                     sliderRef?.current?.slickGoTo(0);

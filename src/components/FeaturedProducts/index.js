@@ -56,7 +56,7 @@ const FeaturedProducts = () => {
 
     const GetProducts = async () => {
         try {
-            const response = await getAll(`http://localhost:5000/products?page=-1`)
+            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/products?page=-1`)
 
             setProducts(response?.data?.products)
 

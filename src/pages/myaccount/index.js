@@ -84,7 +84,7 @@ const MyAccount = () => {
                 msg: 'image uploading...'
             }))
             setIsloading(true);
-            const response = await axios.post('http://localhost:5000/uploads', payload)
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/uploads`, payload)
             setData({ ...data, image: response?.data?.urls?.[0] });
             setIsloading(false);
             dispatch(showAlert({

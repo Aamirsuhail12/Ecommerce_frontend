@@ -8,7 +8,6 @@ import { setHeaderFooterVisibility } from "../../features/ui/uiSlice";
 
 const Home = () => {
 
-  console.log('Home');
   const dispatch = useDispatch();
 
   useEffect(() => {

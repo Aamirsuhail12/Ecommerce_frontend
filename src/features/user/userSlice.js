@@ -1,8 +1,6 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUser, logout, signUp, signIn, updateCart, deleteCart, addCart, addWishList, getWishList, deleteWishList, editProfile, changePassword } from "./userAPI";
-import { LiaOilCanSolid } from "react-icons/lia";
-import { act } from "react";
 
 const initialState = {
     item: {},
@@ -129,7 +127,6 @@ const userSlice = createSlice({
             .addCase(getWishList.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.item.wishList = action?.payload;
-                console.log('aa', state.item.wishList)
             })
             .addCase(deleteWishList.pending, (state) => {
                 state.status = 'loading'

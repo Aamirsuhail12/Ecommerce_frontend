@@ -37,7 +37,6 @@ import { FaProductHunt } from "react-icons/fa6";
 
 const ProductDetails = () => {
 
-    console.log('ProductDetails');
     const dispatch = useDispatch();
     const product = useSelector((state) => state?.products?.singleItem);
     const status = useSelector((state) => state.products.status);

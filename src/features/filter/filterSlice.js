@@ -6,7 +6,7 @@ const initialState = {
     category: 'Electronics',
     subcategory: '',
     brand: '',
-    price: [10, 50000],
+    price: [10, 200000],
 }
 
 const filterSlice = createSlice({

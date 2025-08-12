@@ -6,7 +6,7 @@ import axios from "axios";
 export const addOrder = createAsyncThunk("orders/addOrder", async (payload, { rejectWithValue }) => {
 
     try {
-        const response = await axios.post("http://localhost:5000/orders", payload, {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/orders`, payload, {
             withCredentials: true,
             'content-type': 'application/json'
         })
@@ -20,7 +20,7 @@ export const addOrder = createAsyncThunk("orders/addOrder", async (payload, { re
 export const getOrder = createAsyncThunk("orders/getOrder", async (_, { rejectWithValue }) => {
 
     try {
-        const response = await axios.get(`http://localhost:5000/orders?all=false`, {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/orders?all=false`, {
             withCredentials: true
         })
         
@@ -34,7 +34,7 @@ export const updateOrder = createAsyncThunk("orders/updateOrder", async (payload
 
     
     try {
-        const response = await axios.patch(`http://localhost:5000/orders/${payload.id}`,payload, {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/orders/${payload.id}`,payload, {
             withCredentials: true,
             'content-type': 'application/json'
         })

@@ -36,8 +36,6 @@ function App() {
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
 
-  console.log('App');
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

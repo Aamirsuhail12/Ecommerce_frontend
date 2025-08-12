@@ -46,7 +46,6 @@ const productSlice = createSlice({
             })
             .addCase(SearchProduct.fulfilled,(state,action)=>{
                 state.status = 'succeeded';
-                console.log('pp',action.payload)
                 state.items = action?.payload;
             })
     }

@@ -3,7 +3,7 @@ import './Footer.css'; // Add your custom styles here
 
 const Footer = () => {
 
-  console.log('Footer');
+  
   return (
     <footer className="footer">
       <div className="footer-container">

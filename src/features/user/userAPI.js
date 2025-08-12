@@ -5,7 +5,7 @@ import axios from 'axios';
 export const fetchUser = createAsyncThunk('user/fetchUser', async (_, { rejectWithValue }) => {
 
     try {
-        const response = await axios.get('http://localhost:5000/users/profile', {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/profile`, {
             withCredentials: true
         });
 
@@ -17,7 +17,7 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async (_, { rejectWi
 
 export const editProfile = createAsyncThunk('user/editProfile', async (payload, { rejectWithValue }) => {
     try {
-        const response = await axios.patch('http://localhost:5000/users/edit-profile', payload, {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/edit-profile`, payload, {
             withCredentials: true
         })
         if (response?.data?.success)
@@ -31,7 +31,7 @@ export const editProfile = createAsyncThunk('user/editProfile', async (payload, 
 
 export const changePassword = createAsyncThunk('user/changePassword', async (payload, { rejectWithValue }) => {
     try {
-        const response = await axios.patch('http://localhost:5000/users/change-password', payload, {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/change-password`, payload, {
             withCredentials: true
         })
         return response?.data?.success
@@ -42,7 +42,7 @@ export const changePassword = createAsyncThunk('user/changePassword', async (pay
 
 export const signUp = createAsyncThunk('user/signUp', async (payload, { rejectWithValue }) => {
     try {
-        const response = await axios.post('http://localhost:5000/auth/signup', payload, {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/signup`, payload, {
             withCredentials: true
         });
         return response?.data?.msg;
@@ -55,7 +55,7 @@ export const signUp = createAsyncThunk('user/signUp', async (payload, { rejectWi
 export const signIn = createAsyncThunk('user/signIn', async (payload, { rejectWithValue }) => {
     try {
 
-        const response = await axios.post('http://localhost:5000/auth/signin', payload, {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/signin`, payload, {
             withCredentials: true
         })
 
@@ -68,7 +68,7 @@ export const signIn = createAsyncThunk('user/signIn', async (payload, { rejectWi
 export const logout = createAsyncThunk('user/logout', async (_, { rejectWithValue }) => {
 
     try {
-        const response = await axios.post('http://localhost:5000/auth/logout', {}, {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {}, {
             withCredentials: true
         })
         return response?.data?.msg;
@@ -82,7 +82,7 @@ export const logout = createAsyncThunk('user/logout', async (_, { rejectWithValu
 export const updateCart = createAsyncThunk('user/updateCart', async (payload, { rejectWithValue }) => {
     try {
         const id = payload?.id;
-        const response = await axios.patch(`http://localhost:5000/users/cart/${id}`, { quantity: payload?.quantity }, {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/cart/${id}`, { quantity: payload?.quantity }, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         })
@@ -100,7 +100,7 @@ export const updateCart = createAsyncThunk('user/updateCart', async (payload, { 
 
 export const deleteCart = createAsyncThunk('user/deleteCart', async (id, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`http://localhost:5000/users/cart/${id}`, {
+        const response = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/users/cart/${id}`, {
             withCredentials: true
         })
 
@@ -117,7 +117,7 @@ export const deleteCart = createAsyncThunk('user/deleteCart', async (id, { rejec
 
 export const addCart = createAsyncThunk('user/addCart', async (payload, { rejectWithValue }) => {
     try {
-        const response = await axios.patch('http://localhost:5000/users/cart/add', payload, {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/cart/add`, payload, {
             headers: { "Content-Type": "application/json" },
             withCredentials: true
         });
@@ -135,7 +135,7 @@ export const addCart = createAsyncThunk('user/addCart', async (payload, { reject
 export const addWishList = createAsyncThunk('user/addWishList', async (id, { rejectWithValue }) => {
 
     try {
-        const response = await axios.patch(`http://localhost:5000/users/wishlist/${id}`, {}, {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/wishlist/${id}`, {}, {
             withCredentials: true
         })
         return response?.data?.product
@@ -146,7 +146,7 @@ export const addWishList = createAsyncThunk('user/addWishList', async (id, { rej
 
 export const getWishList = createAsyncThunk('user/getWishList', async (_, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`http://localhost:5000/users/wishlist/`, {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/wishlist/`, {
             withCredentials: true
         })
 
@@ -158,7 +158,7 @@ export const getWishList = createAsyncThunk('user/getWishList', async (_, { reje
 
 export const deleteWishList = createAsyncThunk('user/deleteWishList', async (id, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`http://localhost:5000/users/wishlist/${id}`, {
+        const response = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/users/wishlist/${id}`, {
             withCredentials: true
         })
         return response?.data?.id

@@ -15,7 +15,7 @@ const CountryDropDown = () => {
 
     async function fetchCountryList() {
         try {
-            const response = await axios.get('http://localhost:5000/coutrylist');
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/coutrylist`);
             setcountrylist(Object.values(response?.data?.data));
             setoriginalCountrylist(Object.values(response?.data?.data))
         } catch (error) {

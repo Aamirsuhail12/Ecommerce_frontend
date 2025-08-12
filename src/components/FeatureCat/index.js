@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const FeatureCat = () => {
 
-    console.log('FeaturedCat');
+
     const dispatch = useDispatch();
     const categoryList = useSelector((state) => state?.categories?.items);
     const featuredCatRef = useRef(null);
@@ -51,11 +51,15 @@ const FeatureCat = () => {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            featuredCatRef?.current?.slickGoTo(0);
-        }, 500)
+
         dispatch(fetchCategories());
     }, [])
+
+    useEffect(() => {
+        setTimeout(() => {
+            featuredCatRef?.current?.slickGoTo(0);
+        }, 300)
+    }, [categoryList])
     return (
         <div>
             <h1 className="font-semibold text-[25px] m-[10px]">FEATURED CATEGORIES</h1>

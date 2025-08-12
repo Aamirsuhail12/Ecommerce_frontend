@@ -15,7 +15,6 @@ import { showAlert, closeAlert } from "../../features/alert/alertSlice";
 import { signUp } from "../../features/user/userAPI";
 const SignUp = () => {
 
-    console.log("SignUp");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);

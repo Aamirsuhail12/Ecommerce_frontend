@@ -19,7 +19,7 @@ const Card = ({ productview, product }) => {
     const navigate = useNavigate();
 
     function handleOpen() {
-        console.log("Button clicked! Handling open action...");
+
         setisopen(false);
     }
 

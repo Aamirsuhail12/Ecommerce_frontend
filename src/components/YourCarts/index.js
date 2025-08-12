@@ -14,12 +14,12 @@ import { updateCart, deleteCart } from "../../features/user/userAPI";
 import { Link } from "react-router-dom";
 const YourCarts = () => {
 
-    console.log('YourCarts');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const products = useSelector((state) => state?.user?.item?.cart);
     const [subtotal, setSubtotal] = useState(0);
-    console.log('cart your', products)
+    
 
     const getCart = async () => {
         try {

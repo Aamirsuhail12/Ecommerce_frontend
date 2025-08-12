@@ -19,12 +19,10 @@ const OtpField = () => {
     const [isloading2, setIsLoading2] = useState(false);
 
     const handleChange = (value) => {
-        console.log(value);
         setPin(value);
     };
 
     const handleComplete = (val) => {
-        console.log('Completed OTP:', val);
         setPin(val);
     };
 
@@ -32,7 +30,7 @@ const OtpField = () => {
 
         try {
             setIsLoading1(true)
-            const response = await axios.patch('http://localhost:5000/users/verify-otp', { email, otp: pin });
+            const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/verify-otp`, { email, otp: pin });
             dispatch(showAlert({
                 color: 'success',
                 msg: 'OTP verified successfully!'
@@ -63,7 +61,7 @@ const OtpField = () => {
 
         try {
             setIsLoading2(true)
-            const response = await axios.patch('http://localhost:5000/users/send-otp', { email });
+            const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/send-otp`, { email });
 
             setIsLoading2(false)
             dispatch(showAlert({

@@ -57,7 +57,7 @@ const ResetPassword = () => {
 
         try {
             setIsLoading(true)
-            const response = await axios.patch('http://localhost:5000/users/reset-password', { email, password: payload.newpassword });
+            const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/reset-password`, { email, password: payload.newpassword });
             setIsLoading(false)
             dispatch(showAlert({
                 color: 'success',

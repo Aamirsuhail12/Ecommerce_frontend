@@ -15,10 +15,7 @@ import { signIn } from "../../features/user/userAPI";
 import { signInWithGoogle } from "..//../firebaseConfig";
 import axios from "axios";
 const SignIn = () => {
-
-
-
-    console.log('SignIn');
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
@@ -79,7 +76,7 @@ const SignIn = () => {
             const firebaseUser = await signInWithGoogle();
             if (firebaseUser) {
                 const token = await firebaseUser.getIdToken();
-                const res = await axios.post("http://localhost:5000/auth/signinwithgoogle", { token },{
+                const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/signinwithgoogle`, { token },{
                     withCredentials : true
                 });
 

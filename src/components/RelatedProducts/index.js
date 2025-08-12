@@ -62,7 +62,7 @@ const RelatedProducts = ({ product }) => {
 
           try {
 
-               const response = await getAll(`http://localhost:5000/products?page=-1&filter=${encodeURIComponent(JSON.stringify(filter))}`);
+               const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/products?page=-1&filter=${encodeURIComponent(JSON.stringify(filter))}`);
 
                setProducts(response?.data?.products)
                setTimeout(() => {

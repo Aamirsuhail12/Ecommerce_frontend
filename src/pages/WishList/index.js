@@ -132,7 +132,7 @@ const WishList = () => {
     }
 
     const AddRAM = async (idx, val) => {
-        console.log('ram', idx, val);
+
         setRamSelected(idx);
         setCart({
             ...cart,

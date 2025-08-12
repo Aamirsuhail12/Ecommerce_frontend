@@ -31,7 +31,6 @@ const Searching = () => {
     }, [products])
 
     useEffect(() => {
-        console.log('q',q)
         if(q)
          dispatch(SearchProduct(q));
     }, [q])

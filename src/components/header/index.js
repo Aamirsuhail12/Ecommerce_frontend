@@ -12,11 +12,10 @@ const Header = () => {
 
     const [open, setOpen] = useState(false);
     const toggleDrawer = (newOpen) => () => {
-        console.log('toggle');
         setOpen(newOpen);
     };
 
-    console.log('Header');
+
     return (
         <div>
             <div className="flex flex-col items-center justify-start w-full min-h-24 md:min-h-32 lg:min-h-40 ">

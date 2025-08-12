@@ -45,8 +45,6 @@ const CheckOut = () => {
 
     const handleClick = async (e) => {
 
-        console.log('order', order)
-
         if (!order?.name || !order?.phone || !order?.email || !order?.country || !order?.landmark || !order?.street
             || !order?.town || !order?.state || !order?.pincode || order?.orderStatus === '') {
             dispatch(showAlert({

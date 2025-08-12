@@ -7,7 +7,7 @@ import { fetchProducts } from "../../features/product/productAPI";
 
 const SelectedProducts = () => {
 
-  console.log('SelectedProducts');
+  
   const filter = useSelector((state) => state.filter);
   const products = useSelector((state) => state.products.items);
   const sliderRef = useRef(null);

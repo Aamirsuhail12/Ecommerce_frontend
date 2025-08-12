@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 
 const ViewAllProducts = () => {
 
-    console.log('ViewAllProducts');
+
     const dispatch = useDispatch();
     const { items, status, error } = useSelector((state) => state.products);
     const featuredProducts = items.filter((p) => p.isFeatured === true);

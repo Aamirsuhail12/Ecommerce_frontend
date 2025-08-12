@@ -42,7 +42,7 @@ export default function TemporaryDrawer({ open, toggleDrawer }) {
 
     const GetSubCategoryList = async (category) => {
         try {
-            const response = await getAll(`http://localhost:5000/subcategory?page=-1&category=${JSON.stringify(category)}`)
+            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/subcategory?page=-1&category=${JSON.stringify(category)}`)
             setsubcategorylist(response?.data?.subcategory)
         } catch (error) {
 
@@ -53,9 +53,9 @@ export default function TemporaryDrawer({ open, toggleDrawer }) {
     const GetProductsBrands = async () => {
 
         try {
-            const response = await getAll('http://localhost:5000/products?page=-1')
+            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/products?page=-1`)
             const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
-            console.log('bra', brands);
+
             setbrands(brands);
         } catch (error) {
             console.log('Error in getting product brands', error);

@@ -16,17 +16,18 @@ import { setBrand, setPrice, setSubcategory } from '../../features/filter/filter
 
 const Sidebar = () => {
 
-    const filter = useSelector((state) => state?.filter);
+    const filter_ = useSelector((state) => state?.filter);
 
-    console.log('fil side', filter)
     const dispatch = useDispatch();
     const [subcategorylist, setsubcategorylist] = useState([]);
     const [brands, setbrands] = useState([]);
 
     const GetSubCategoryList = async (category) => {
+        
         try {
-            const response = await getAll(`http://localhost:5000/subcategory?page=-1&category=${JSON.stringify(category)}`)
+            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/subcategory?page=-1&category=${encodeURIComponent(category)}`)
             setsubcategorylist(response?.data?.subcategory)
+            console.log('res',response?.data?.subcategory)
         } catch (error) {
 
             console.log('Error in getting subcategory', error);
@@ -36,8 +37,9 @@ const Sidebar = () => {
     const GetProductsBrands = async () => {
 
         try {
-            const response = await getAll('http://localhost:5000/products?page=-1')
-            const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
+            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/products?page=-1`)
+            // const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
+            const brands = [...new Set([...response?.data?.products?.filter(p =>  p?.category?.name === filter_?.category )].map((p)=> p?.brand))]
             setbrands(brands);
         } catch (error) {
             console.log('Error in getting product brands', error);
@@ -59,10 +61,10 @@ const Sidebar = () => {
 
     useEffect(() => {
 
-        GetSubCategoryList(filter?.category);
+        GetSubCategoryList(filter_?.category);
         GetProductsBrands();
 
-    }, [filter])
+    }, [filter_])
 
 
     return (
@@ -73,7 +75,7 @@ const Sidebar = () => {
                     aria-labelledby="demo-radio-buttons-group-label"
                     name="radio-buttons-group"
                     // value={radionFilter.selectedSubcategory}
-                    value={filter.subcategory}
+                    value={filter_.subcategory}
                     onChange={(e) => {
                         selectedVal('subcategory', e.target.value);
                     }}
@@ -97,12 +99,12 @@ const Sidebar = () => {
             <div>
                 <h3 className='font-semibold mb-4'>FILTER BY PRICE</h3>
                 {/* <RangeSlider value={val} onInput={setval} min={10} max={100000} /> */}
-                <RangeSlider value={filter.price} onInput={(v) => {
+                <RangeSlider value={filter_.price} onInput={(v) => {
                     filterbyprice(v)
-                }} min={10} max={100000} />
+                }} min={10} max={200000} />
                 <div className='flex justify-between mt-2'>
-                    <span>From Rs : <strong className='text-green-800'>{filter.price[0]}</strong></span>
-                    <span>To Rs : <strong className='text-green-800'>{filter.price[1]}</strong></span>
+                    <span>From Rs : <strong className='text-green-800'>{filter_.price[0]}</strong></span>
+                    <span>To Rs : <strong className='text-green-800'>{filter_.price[1]}</strong></span>
                 </div>
             </div>
 
@@ -130,7 +132,7 @@ const Sidebar = () => {
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     name="radio-buttons-group"
-                    value={filter.brand}
+                    value={filter_.brand}
                     onChange={(e) => {
                         selectedVal('brand', e.target.value);
                     }}
