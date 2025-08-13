@@ -12,7 +12,11 @@ const initialState = {
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        emptyCart : (state)=>{
+            state.item.cart = []
+        }
+    },
     extraReducers: (builder) => {
 
         builder
@@ -167,4 +171,5 @@ const userSlice = createSlice({
     }
 })
 
+export const {emptyCart} = userSlice.actions
 export default userSlice.reducer;

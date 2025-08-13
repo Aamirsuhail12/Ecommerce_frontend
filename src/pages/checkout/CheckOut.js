@@ -10,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import { showAlert } from '../../features/alert/alertSlice';
 import { addOrder } from '../../features/order/orderAPI';
 import CircularProgress from '@mui/material/CircularProgress';
+import { emptyCart } from '../../features/user/userSlice';
 
 
 const CheckOut = () => {
@@ -18,6 +19,7 @@ const CheckOut = () => {
     const navigate = useNavigate();
     const products = useSelector((state) => state?.user?.item?.cart);
     const orders = useSelector((state) => state?.orders);
+    const user = useSelector((state)=>state?.user)
     const [total, setTotal] = useState(0);
 
     const [order, setOrder] = useState({
@@ -56,7 +58,7 @@ const CheckOut = () => {
 
         try {
             await dispatch(addOrder(order)).unwrap();
-            
+            dispatch(emptyCart())
             navigate('/order/confirm');
             setOrder({
                 name: '',
