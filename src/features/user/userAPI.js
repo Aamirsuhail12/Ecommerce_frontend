@@ -166,3 +166,21 @@ export const deleteWishList = createAsyncThunk('user/deleteWishList', async (id,
         return rejectWithValue(error?.message || error?.response?.data?.msg)
     }
 })
+
+export const emptyCart = createAsyncThunk('user/emptyCart', async (_, { rejectWithValue }) => {
+    try {
+        
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/users/empty-cart`, { }, {
+            withCredentials: true
+        })
+
+        if (response?.data?.success === true)
+            return [];
+        else {
+            return rejectWithValue("Update failed");
+        }
+
+    } catch (error) {
+        return rejectWithValue(error?.response?.data?.msg || error?.message);
+    }
+})

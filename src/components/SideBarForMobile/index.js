@@ -42,7 +42,7 @@ export default function TemporaryDrawer({ open, toggleDrawer }) {
 
     const GetSubCategoryList = async (category) => {
         try {
-            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/subcategory?page=-1&category=${JSON.stringify(category)}`)
+            const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/subcategory?page=-1&category=${encodeURIComponent(category)}`)
             setsubcategorylist(response?.data?.subcategory)
         } catch (error) {
 
@@ -54,7 +54,8 @@ export default function TemporaryDrawer({ open, toggleDrawer }) {
 
         try {
             const response = await getAll(`${process.env.REACT_APP_SERVER_URL}/products?page=-1`)
-            const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
+            // const brands = response?.data?.products && [...new Set(response?.data?.products?.map(p => p?.brand))]
+            const brands = [...new Set([...response?.data?.products?.filter(p => p?.category?.name === filter?.category)].map((p) => p?.brand))]
 
             setbrands(brands);
         } catch (error) {

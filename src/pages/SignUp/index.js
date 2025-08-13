@@ -47,6 +47,14 @@ const SignUp = () => {
             return;
         }
 
+        if(payload.phone.length > 10){
+            dispatch(showAlert({
+                color : 'error',
+                msg : 'Phone no should be 10 digits without symbols'
+            }))
+            return;
+        }
+
         if (payload?.password !== payload?.confirmPassword) {
             dispatch(showAlert({
                 color: 'error',

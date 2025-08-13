@@ -56,7 +56,7 @@ const CheckOut = () => {
 
         try {
             await dispatch(addOrder(order)).unwrap();
-
+            
             navigate('/order/confirm');
             setOrder({
                 name: '',
