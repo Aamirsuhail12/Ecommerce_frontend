@@ -20,8 +20,8 @@ const Header = () => {
         <div>
             <div className="flex flex-col items-center justify-start w-full min-h-24 md:min-h-32 lg:min-h-40 ">
                 <div className="flex justify-center items-center text-center p-5  w-full text-white bg-blue-700">
-                    <p>"I believe every great idea deserves a great execution."</p>
-                    <p >  <b> — Aamir Suhail</b></p>
+                    <p>"I believe every great idea deserves a great execution."<b> — Aamir Suhail</b></p>
+                    
                 </div>
 
                 <div className=" flex justify-between items-center gap-3 h-[56px] px-2 py-8 sm:px-8 md:py-12 md:px-12 w-full">
